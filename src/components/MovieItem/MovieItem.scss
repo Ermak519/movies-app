@@ -1,0 +1,13 @@
+.movie-list-item {
+    .ant-card-body{
+        padding: 12px 20px 49px 20px;
+    }
+    &__title{
+        display: flex;
+        justify-content: space-between;
+    }
+    &__genres{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+}

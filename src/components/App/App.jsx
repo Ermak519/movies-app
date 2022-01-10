@@ -6,7 +6,7 @@ import './App.scss';
 
 
 export default class App extends Component {
-    constructor(){
+    constructor() {
         super();
 
         this.movieDBService = new MovieDBService();
@@ -16,56 +16,69 @@ export default class App extends Component {
                 {
                     title: null,
                     descr: null,
-                    img: null
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null
                 },
                 {
                     title: null,
                     descr: null,
-                    img: null
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null
                 },
                 {
                     title: null,
                     descr: null,
-                    img: null
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null
                 },
                 {
                     title: null,
                     descr: null,
-                    img: null
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null
                 },
                 {
                     title: null,
                     descr: null,
-                    img: null
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null
                 },
                 {
                     title: null,
                     descr: null,
-                    img: null
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null
                 }
             ],
         };
         this.movieDBService.getMovie('spider')
             .then((res) => {
-                const {results} = res;
-                const {data} = this.state;
+                const { results } = res;
+                const { data } = this.state;
                 return data.map((obj, i) => {
                     const elem = obj
                     elem.title = results[i].title;
                     elem.descr = results[i].overview;
                     elem.img = results[i].poster_path;
+                    elem.date = results[i].release_date;
                     return elem;
                 })
             })
-            .then((newArr)=>{this.setState({data: newArr})});
+            .then((newArr) => { this.setState({ data: newArr }) });
     }
 
-    render(){
-        const {data} = this.state;
-        
+    render() {
+        const { data } = this.state;
+
         return (
             <div className="app">
-                <MovieList 
+                <MovieList
                     data={data}
                 />
             </div>
