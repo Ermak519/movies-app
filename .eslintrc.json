@@ -23,6 +23,7 @@
         "jest": true
     },
     "rules": {
+        "no-underscore-dangle": "off",
         "jsx-a11y/no-autofocus": 0,
         "import/extensions": [
             "error",
