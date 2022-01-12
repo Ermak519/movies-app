@@ -74,8 +74,6 @@ export default class App extends Component {
             .then((elem) => { this.setState({ data: elem }) });
     }
 
-    filterDescrText = (str) => str.split(' ').filter((elem, i) => i > 20);
-
     render() {
         const { data } = this.state;
 
@@ -83,7 +81,6 @@ export default class App extends Component {
             <div className="app">
                 <MovieList
                     data={data}
-                    filterDescrText={this.filterDescrText}
                 />
             </div>
         )

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import format from 'date-fns/format'
 
 import { GenreList } from "../GenreList";
-import { MovieRating } from "../MovieRating";
+// import { MovieRating } from "../MovieRating";
 
 import './MovieItem.scss'
 
@@ -12,6 +12,8 @@ const { Title, Text } = Typography;
 
 export default function MovieItem({ item }) {
     const { title, descr, img, genres, date } = item;
+    const filterDescrText = (str) => str === null ? null : str.split(' ').filter((elem, i) => i < 20).join(' ');
+    const newDescr = filterDescrText(descr)
 
     const formatDate = format(new Date(date), 'PPP');
     const picture = `http://image.tmdb.org/t/p/w500${img}`;
@@ -38,8 +40,8 @@ export default function MovieItem({ item }) {
                 </div>
                 
                 <Text 
-                    className="movie-list-item__descr">{descr}</Text>
-                <MovieRating/> 
+                    className="movie-list-item__descr">{`${newDescr}...`}</Text>
+                {/* <MovieRating/>  */}
             </Card>
         </div>
     );
