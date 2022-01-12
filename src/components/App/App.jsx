@@ -56,10 +56,11 @@ export default class App extends Component {
                     date: null
                 }
             ],
-            isLoad: true
+            isLoad: true,
+            isError: false
         };
 
-        this.movieDBService.getMovie('batman')
+        this.movieDBService.getMovie('spider')
             .then((res) => {
                 const { results } = res;
                 const { data } = this.state;
@@ -72,18 +73,25 @@ export default class App extends Component {
                     return elem;
                 })
             })
-            .then((elem) => { this.setState({ data: elem }) });
+            .then((elem) => { this.setState({ data: elem, isLoad: false }) })
+            .catch(() => { this.setState({ isLoad: false, isError: true }) });
     }
 
+
+
     render() {
-        const { data, isLoad } = this.state;
+        const { data, isLoad, isError } = this.state;
+
+        const renderMovieList =
+            <MovieList
+                data={data}
+                isLoad={isLoad}
+                isError={isError}
+            />
 
         return (
             <div className="app">
-                <MovieList
-                    data={data}
-                    isLoad={isLoad}
-                />
+                {renderMovieList}
             </div>
         )
     }

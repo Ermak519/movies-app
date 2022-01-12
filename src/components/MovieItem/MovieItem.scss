@@ -6,7 +6,14 @@
   .ant-typography {
     margin: 0;
   }
-
+  &__wrapper{
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+  }
+  &__rating{
+      align-self: flex-end;
+  }
   &__header {
     display: flex;
     justify-content: space-between;
@@ -14,7 +21,7 @@
   }
 
   &__title {
-    font-size: 20px;
+    font-size: 20px; 
   }
 
   &__date {
@@ -41,4 +48,8 @@ h5 {
   .ant-typography {
     font-size: 20px;
   }
+}
+
+.ant-card-loading-content{
+    width: 240px;
 }
