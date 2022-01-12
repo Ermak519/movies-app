@@ -56,6 +56,7 @@ export default class App extends Component {
                     date: null
                 }
             ],
+            isLoad: true
         };
 
         this.movieDBService.getMovie('batman')
@@ -75,12 +76,13 @@ export default class App extends Component {
     }
 
     render() {
-        const { data } = this.state;
+        const { data, isLoad } = this.state;
 
         return (
             <div className="app">
                 <MovieList
                     data={data}
+                    isLoad={isLoad}
                 />
             </div>
         )

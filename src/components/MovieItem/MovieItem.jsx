@@ -10,7 +10,7 @@ import './MovieItem.scss'
 
 const { Title, Text } = Typography;
 
-export default function MovieItem({ item }) {
+export default function MovieItem({ item, isLoad }) {
     const { title, descr, img, genres, date } = item;
     const filterDescrText = (str) => str === null ? null : str.split(' ').filter((elem, i) => i < 20).join(' ');
     const newDescr = filterDescrText(descr)
@@ -27,7 +27,9 @@ export default function MovieItem({ item }) {
                     display: "flex",
                     overflow: "hidden"
                 }}
-                cover={<img alt={title} src={picture} style={{ width: 183, height: 281 }} />}>
+                cover={<img alt={title} src={picture} style={{ width: 183, height: 281 }} />}
+                loading={isLoad}
+            >   
                 <div className="movie-list-item__header">
                     <Title className="movie-list-item__title" level={4}>{title}</Title>
                     <div className="movie-list-item__rate">Rating</div>
@@ -49,8 +51,10 @@ export default function MovieItem({ item }) {
 
 MovieItem.defaultProps = {
     item: {},
+    isLoad: true
 };
 
 MovieItem.propTypes = {
     item: PropTypes.objectOf(PropTypes.any),
+    isLoad: PropTypes.bool
 };
