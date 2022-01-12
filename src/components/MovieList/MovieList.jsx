@@ -5,7 +5,8 @@ import { MovieItem } from '../MovieItem'
 
 import './MovieList.scss'
 
-export default function MovieList({data}) {
+
+export default function MovieList({data, filterDescrText}) {
 
     return (
         <div className="movie-list">
@@ -16,7 +17,9 @@ export default function MovieList({data}) {
                 dataSource={data}
                 renderItem={item => (
                     <List.Item>
-                        <MovieItem item={item} />
+                        <MovieItem 
+                            item={item}
+                            filterDescrText={filterDescrText} />
                     </List.Item>
                 )}
             />
@@ -26,8 +29,10 @@ export default function MovieList({data}) {
 
 MovieList.defaultProps = {
     data: [],
+    filterDescrText: ()=>{}
 };
 
 MovieList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
+    filterDescrText: PropTypes.func
 };

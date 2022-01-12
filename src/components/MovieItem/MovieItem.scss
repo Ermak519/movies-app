@@ -1,13 +1,44 @@
 .movie-list-item {
-    .ant-card-body{
-        padding: 12px 20px 49px 20px;
-    }
-    &__title{
-        display: flex;
-        justify-content: space-between;
-    }
-    &__genres{
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
+  .ant-card-body {
+    padding: 12px 20px 49px 20px;
+  }
+
+  .ant-typography {
+    margin: 0;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 7px;
+  }
+
+  &__title {
+    font-size: 20px;
+  }
+
+  &__date {
+    display: block;
+    margin-bottom: 7px;
+  }
+
+  &__genres {
+    display: block;
+    margin-top: 7px;
+    margin-bottom: 7px;
+  }
+
+  &__descr {
+    display: block;
+    height: 129px;
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 22px;
+  }
+}
+
+h5 {
+  .ant-typography {
+    font-size: 20px;
+  }
 }

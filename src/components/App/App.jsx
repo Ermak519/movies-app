@@ -57,7 +57,8 @@ export default class App extends Component {
                 }
             ],
         };
-        this.movieDBService.getMovie('spider')
+
+        this.movieDBService.getMovie('batman')
             .then((res) => {
                 const { results } = res;
                 const { data } = this.state;
@@ -70,8 +71,10 @@ export default class App extends Component {
                     return elem;
                 })
             })
-            .then((newArr) => { this.setState({ data: newArr }) });
+            .then((elem) => { this.setState({ data: elem }) });
     }
+
+    filterDescrText = (str) => str.split(' ').filter((elem, i) => i > 20);
 
     render() {
         const { data } = this.state;
@@ -80,6 +83,7 @@ export default class App extends Component {
             <div className="app">
                 <MovieList
                     data={data}
+                    filterDescrText={this.filterDescrText}
                 />
             </div>
         )
