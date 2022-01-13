@@ -1,12 +1,18 @@
+import axios from "axios";
+
 export default class MovieDBService {
 
-    _apiURL = 'https://api.themoviedb.org/3/search/';
+    #API_URL = 'https://api.themoviedb.org/3/search/';
 
-    _apiKey = 'api_key=c44a17584532fd2e9358778c916fc8ce'
+    #API_Key = 'api_key=c44a17584532fd2e9358778c916fc8ce'
 
     getMovie = async (query) => {
-        const res = await fetch(`${this._apiURL}movie?${this._apiKey}&query=${query}`);
-        const data = await res.json();
+        const { data } = await axios.get(`${this.#API_URL}movie?${this.#API_Key}&query=${query}`)
+        return data
+    }
+
+    getData = async (query) => {
+        const data = await axios.get(`${this.#API_URL}movie?${this.#API_Key}&query=${query}`)
         return data
     }
 }

@@ -1,19 +1,19 @@
 import React from "react";
-import { Rate } from 'antd';
+import PropTypes from "prop-types";
+
 
 import './MovieRating.scss'
 
-export default function MovieRating () {
-    return <Rate 
-            allowHalf 
-            defaultValue={2.5}
-            disabled
-            count={10}
-            style={{
-                fontSize: 14, 
-                paddingTop: 10, 
-                paddingBottom: 10,
-                paddingLeft: 5,
-                paddingRight: 5
-            }}/>
+export default function MovientRating({ rating }) {
+    return <span>
+        {rating}
+    </span>
 }
+
+MovientRating.defaultProps = {
+    rating: 0,
+};
+
+MovientRating.propTypes = {
+    rating: PropTypes.number,
+};

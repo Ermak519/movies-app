@@ -1,5 +1,7 @@
 import React, { Component } from "react";
+import { message } from 'antd'
 import { MovieList } from "../MovieList";
+
 
 import MovieDBService from '../../services/MovieDBService';
 import './App.scss';
@@ -18,80 +20,92 @@ export default class App extends Component {
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
-                    date: null
+                    date: null,
+                    rating: null
                 },
                 {
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
-                    date: null
+                    date: null,
+                    rating: null
                 },
                 {
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
-                    date: null
+                    date: null,
+                    rating: null
                 },
                 {
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
-                    date: null
+                    date: null,
+                    rating: null
                 },
                 {
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
-                    date: null
+                    date: null,
+                    rating: null
                 },
                 {
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
-                    date: null
+                    date: null,
+                    rating: null
                 }
             ],
             isLoad: true,
-            isError: false
+            isError: false,
         };
 
-        this.movieDBService.getMovie('spider')
+        this.request = 'batman'
+
+        this.movieDBService.getData(this.request).then((res) => { console.log(res) })
+
+        this.movieDBService.getMovie(this.request)
             .then((res) => {
                 const { results } = res;
                 const { data } = this.state;
                 return data.map((obj, i) => {
-                    const elem = obj
-                    elem.title = results[i].title;
-                    elem.descr = results[i].overview;
-                    elem.img = results[i].poster_path;
-                    elem.date = results[i].release_date;
-                    return elem;
+                    const elem =
+                    {
+                        title: results[i].title,
+                        descr: results[i].overview,
+                        img: results[i].poster_path,
+                        date: results[i].release_date || undefined,
+                        genres: obj.genres,
+                        rating: results[i].popularity
+                    }
+                    return elem
                 })
             })
             .then((elem) => { this.setState({ data: elem, isLoad: false }) })
-            .catch(() => { this.setState({ isLoad: false, isError: true }) });
+            .catch(() => {
+                message.error('404. Ой, что-то не так.');
+                this.setState({ isLoad: false, isError: true })
+            });
     }
-
-
 
     render() {
         const { data, isLoad, isError } = this.state;
 
-        const renderMovieList =
-            <MovieList
-                data={data}
-                isLoad={isLoad}
-                isError={isError}
-            />
-
         return (
             <div className="app">
-                {renderMovieList}
+                <MovieList
+                    data={data}
+                    isLoad={isLoad}
+                    isError={isError}
+                />
             </div>
         )
     }
