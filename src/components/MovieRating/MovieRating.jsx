@@ -5,9 +5,9 @@ import PropTypes from "prop-types";
 import './MovieRating.scss'
 
 export default function MovientRating({ rating }) {
-    return <span>
+    return <div className="movie-rating">
         {rating}
-    </span>
+    </div>
 }
 
 MovientRating.defaultProps = {

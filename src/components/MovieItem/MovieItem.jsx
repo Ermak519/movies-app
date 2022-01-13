@@ -54,7 +54,7 @@ export default function MovieItem({ item, isLoad }) {
                         </div>
                         <Text className="movie-list-item__descr">{`${newDescr} ...`}</Text>
                     </div>
-                    <div className="movie-list-item__rating">
+                    <div className="movie-list-item__user-rating">
                         <ClientRating />
                     </div>
                 </div>

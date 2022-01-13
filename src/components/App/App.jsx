@@ -84,7 +84,7 @@ export default class App extends Component {
                         img: results[i].poster_path,
                         date: results[i].release_date || undefined,
                         genres: obj.genres,
-                        rating: results[i].popularity
+                        rating: results[i].popularity.toFixed(1)
                     }
                     return elem
                 })
