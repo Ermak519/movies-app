@@ -70,7 +70,7 @@ export default class App extends Component {
 
         this.request = 'batman'
 
-        this.movieDBService.getData(this.request).then((res) => { console.log(res) })
+        // this.movieDBService.getData(this.request).then((res) => { console.log(res) })
 
         this.movieDBService.getMovie(this.request)
             .then((res) => {
@@ -84,7 +84,7 @@ export default class App extends Component {
                         img: results[i].poster_path,
                         date: results[i].release_date || undefined,
                         genres: obj.genres,
-                        rating: results[i].popularity.toFixed(1)
+                        rating: results[i].popularity
                     }
                     return elem
                 })
