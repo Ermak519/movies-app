@@ -16,52 +16,64 @@ export default class App extends Component {
         this.state = {
             data: [
                 {
+                    id: null,
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
                     date: null,
-                    rating: null
+                    rating: null,
+                    clientRating: null
                 },
                 {
+                    id: null,
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
                     date: null,
-                    rating: null
+                    rating: null,
+                    clientRating: null
                 },
                 {
+                    id: null,
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
                     date: null,
-                    rating: null
+                    rating: null,
+                    clientRating: null
                 },
                 {
+                    id: null,
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
                     date: null,
-                    rating: null
+                    rating: null,
+                    clientRating: null
                 },
                 {
+                    id: null,
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
                     date: null,
-                    rating: null
+                    rating: null,
+                    clientRating: null
                 },
                 {
+                    id: null,
                     title: null,
                     descr: null,
                     img: null,
                     genres: ['Action', 'Drama'],
                     date: null,
-                    rating: null
+                    rating: null,
+                    clientRating: null
                 }
             ],
             isLoad: true,
@@ -79,12 +91,14 @@ export default class App extends Component {
                 return data.map((obj, i) => {
                     const elem =
                     {
+                        id: results[i].id,
                         title: results[i].title,
                         descr: results[i].overview,
                         img: results[i].poster_path,
                         date: results[i].release_date || undefined,
                         genres: obj.genres,
-                        rating: results[i].popularity
+                        rating: results[i].popularity,
+                        clientRating: parseFloat(localStorage.getItem(`movie-rating_${results[i].id}`)) || 0
                     }
                     return elem
                 })
@@ -96,6 +110,14 @@ export default class App extends Component {
             });
     }
 
+    onChangeRating = (id, value) => {
+        const {data:arr} = this.state
+        const idx = arr.findIndex(elem => elem.id === id)
+        const item = arr[idx]
+        item.clientRating = localStorage.setItem(`movie-rating_${id}`, value)
+        this.setState({data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)]})
+    }
+
     render() {
         const { data, isLoad, isError } = this.state;
 
@@ -105,6 +127,7 @@ export default class App extends Component {
                     data={data}
                     isLoad={isLoad}
                     isError={isError}
+                    onChangeRating={this.onChangeRating}
                 />
             </div>
         )

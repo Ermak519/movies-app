@@ -11,8 +11,8 @@ import './MovieItem.scss'
 
 const { Title, Text } = Typography;
 
-export default function MovieItem({ item, isLoad }) {
-    const { title, descr, img, genres, date, rating } = item;
+export default function MovieItem({ item, isLoad, onChangeRating }) {
+    const { id, title, descr, img, genres, date, rating, clientRating } = item;
     const filterDescrText = (str) => str === null ? null : str.split(' ').filter((elem, i) => i < 25).join(' ');
     const newDescr = filterDescrText(descr);
     const picture = `http://image.tmdb.org/t/p/w500${img}`;
@@ -55,7 +55,11 @@ export default function MovieItem({ item, isLoad }) {
                         <Text className="movie-list-item__descr">{`${newDescr} ...`}</Text>
                     </div>
                     <div className="movie-list-item__user-rating">
-                        <ClientRating />
+                        <ClientRating 
+                            id={id}
+                            clientRating={clientRating}
+                            onChangeRating={onChangeRating}
+                        />
                     </div>
                 </div>
 
@@ -66,10 +70,12 @@ export default function MovieItem({ item, isLoad }) {
 
 MovieItem.defaultProps = {
     item: {},
-    isLoad: true
+    isLoad: true,
+    onChangeRating: ()=>{}
 };
 
 MovieItem.propTypes = {
     item: PropTypes.objectOf(PropTypes.any),
-    isLoad: PropTypes.bool
+    isLoad: PropTypes.bool,
+    onChangeRating: PropTypes.func
 };

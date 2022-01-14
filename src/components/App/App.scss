@@ -1,7 +1,9 @@
 @import '~antd/dist/antd.css';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 .app {
   width: 1000px;
   margin: auto;
   margin-top: 50px;
+  font-family: 'Inter', sans-serif;
 }

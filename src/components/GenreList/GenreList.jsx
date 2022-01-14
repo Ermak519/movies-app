@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 export default function GenreList({ genres }) {
     return (
-        <Space size={1}>
+        <Space size={1} >
             <Tag>{genres[0]}</Tag>
             <Tag>{genres[1]}</Tag>
         </Space>

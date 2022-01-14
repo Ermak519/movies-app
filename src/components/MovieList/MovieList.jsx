@@ -7,7 +7,7 @@ import { MovieItem } from '../MovieItem'
 import './MovieList.scss'
 
 
-export default function MovieList({ data, isLoad, isError }) {
+export default function MovieList({ data, isLoad, isError, onChangeRating}) {
     return (
         <div className="movie-list">
             {
@@ -21,7 +21,8 @@ export default function MovieList({ data, isLoad, isError }) {
                             <List.Item>
                                 <MovieItem
                                     item={item}
-                                    isLoad={isLoad} />
+                                    isLoad={isLoad}
+                                    onChangeRating={onChangeRating} />
                             </List.Item>
                         )}
                     /> : <Empty
@@ -40,10 +41,12 @@ MovieList.defaultProps = {
     data: [],
     isLoad: true,
     isError: false,
+    onChangeRating: ()=>{}
 };
 
 MovieList.propTypes = {
     data: PropTypes.arrayOf(PropTypes.object),
     isLoad: PropTypes.bool,
     isError: PropTypes.bool,
+    onChangeRating: PropTypes.func
 };
