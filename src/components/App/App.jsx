@@ -97,7 +97,7 @@ export default class App extends Component {
                         img: results[i].poster_path,
                         date: results[i].release_date || undefined,
                         genres: obj.genres,
-                        rating: results[i].popularity,
+                        rating: results[i].vote_average,
                         clientRating: parseFloat(localStorage.getItem(`movie-rating_${results[i].id}`)) || 0
                     }
                     return elem
