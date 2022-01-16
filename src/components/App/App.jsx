@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { message } from 'antd'
 import { MovieList } from "../MovieList";
+import { SearchPanel } from "../SearchPanel";
+import { PaginationList } from "../PaginationList";
+
+// import debounce from "lodash.debounce";
 
 
 import MovieDBService from '../../services/MovieDBService';
@@ -78,13 +82,15 @@ export default class App extends Component {
             ],
             isLoad: true,
             isError: false,
+            request: ''
         };
-
-        this.request = 'batman'
-
         // this.movieDBService.getData(this.request).then((res) => { console.log(res) })
+    }
 
-        this.movieDBService.getMovie(this.request)
+    componentDidMount() {
+        const { request } = this.state;
+
+        this.movieDBService.getMovie(request)
             .then((res) => {
                 const { results } = res;
                 const { data } = this.state;
@@ -111,24 +117,32 @@ export default class App extends Component {
     }
 
     onChangeRating = (id, value) => {
-        const {data:arr} = this.state
+        const { data: arr } = this.state
         const idx = arr.findIndex(elem => elem.id === id)
         const item = arr[idx]
         item.clientRating = localStorage.setItem(`movie-rating_${id}`, value)
-        this.setState({data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)]})
+        this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
     }
 
+    // onSearchMovie = () => {
+
+    // }
+
     render() {
-        const { data, isLoad, isError } = this.state;
+        const { data, isLoad, isError, request } = this.state;
 
         return (
             <div className="app">
+                <SearchPanel
+                    request={request} />
                 <MovieList
                     data={data}
                     isLoad={isLoad}
                     isError={isError}
                     onChangeRating={this.onChangeRating}
                 />
+                <PaginationList
+                    isError={isError} />
             </div>
         )
     }
