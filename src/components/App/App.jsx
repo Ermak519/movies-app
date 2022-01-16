@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { message } from 'antd'
+import { message, Spin } from 'antd'
 import { MovieList } from "../MovieList";
 import { SearchPanel } from "../SearchPanel";
 import { PaginationList } from "../PaginationList";
+
 
 // import debounce from "lodash.debounce";
 
@@ -80,6 +81,7 @@ export default class App extends Component {
                     clientRating: null
                 }
             ],
+            loading: false,
             isLoad: true,
             isError: false,
             request: ''
@@ -91,6 +93,10 @@ export default class App extends Component {
         const { request } = this.state;
 
         this.movieDBService.getMovie(request)
+            .then((res) => {
+                this.setState({ loading: true });
+                return res
+            })
             .then((res) => {
                 const { results } = res;
                 const { data } = this.state;
@@ -109,11 +115,20 @@ export default class App extends Component {
                     return elem
                 })
             })
-            .then((elem) => { this.setState({ data: elem, isLoad: false }) })
+            .then((elem) => { this.setState({ data: elem, isLoad: false, loading: false }) })
             .catch(() => {
                 message.error('404. Ой, что-то не так.');
-                this.setState({ isLoad: false, isError: true })
+                this.setState({ isLoad: false, isError: true, loading: false })
             });
+    }
+
+    componentDidUpdate() {
+        const { request } = this.state
+        const test = request
+        console.log('Update', test, request)
+        if (request !== test) {
+            this.onSearchMovie(request)
+        }
     }
 
     onChangeRating = (id, value) => {
@@ -124,23 +139,56 @@ export default class App extends Component {
         this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
     }
 
-    // onSearchMovie = () => {
-
-    // }
+    onSearchMovie = (text) => {
+        console.log(text)
+        this.movieDBService.getMovie(text)
+            .then((res) => {
+                this.setState({ loading: true, request: text });
+                return res
+            })
+            .then((res) => {
+                const { results } = res;
+                const { data } = this.state;
+                return data.map((obj, i) => {
+                    const elem =
+                    {
+                        id: results[i].id,
+                        title: results[i].title,
+                        descr: results[i].overview,
+                        img: results[i].poster_path,
+                        date: results[i].release_date || undefined,
+                        genres: obj.genres,
+                        rating: results[i].vote_average,
+                        clientRating: parseFloat(localStorage.getItem(`movie-rating_${results[i].id}`)) || 0
+                    }
+                    return elem
+                })
+            })
+            .then((elem) => { this.setState({ data: elem, isLoad: false, loading: false }) })
+            .catch(() => {
+                message.error('404. Ой, что-то не так.');
+                this.setState({ isLoad: false, isError: true, loading: false })
+            });
+    }
 
     render() {
-        const { data, isLoad, isError, request } = this.state;
+        const { data, isLoad, isError, request, loading } = this.state;
 
         return (
             <div className="app">
                 <SearchPanel
-                    request={request} />
-                <MovieList
-                    data={data}
-                    isLoad={isLoad}
-                    isError={isError}
-                    onChangeRating={this.onChangeRating}
-                />
+                    request={request}
+                    onSearchMovie={this.onSearchMovie} />
+                {!loading ?
+                    <MovieList
+                        data={data}
+                        isLoad={isLoad}
+                        isError={isError}
+                        onChangeRating={this.onChangeRating}
+                    /> :
+                    <Spin
+                        size="large" />
+                }
                 <PaginationList
                     isError={isError} />
             </div>

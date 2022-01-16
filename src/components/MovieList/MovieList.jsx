@@ -1,5 +1,5 @@
 import React from "react";
-import { List, Empty } from 'antd';
+import { List, Result } from 'antd';
 import PropTypes from 'prop-types';
 
 import { MovieItem } from '../MovieItem'
@@ -7,7 +7,7 @@ import { MovieItem } from '../MovieItem'
 import './MovieList.scss'
 
 
-export default function MovieList({ data, isLoad, isError, onChangeRating}) {
+export default function MovieList({ data, isLoad, isError, onChangeRating }) {
     return (
         <div className="movie-list">
             {
@@ -25,13 +25,13 @@ export default function MovieList({ data, isLoad, isError, onChangeRating}) {
                                     onChangeRating={onChangeRating} />
                             </List.Item>
                         )}
-                    /> : <Empty
+                    /> : <Result
                         className="movie-list-error"
-                        description={
-                            <span>
-                                По Вашему запросу ничего не найдено.
-                            </span>
-                        } />
+                        status="404"
+                        title="404"
+                        subTitle="По Вашему запросу ничего не найдено"
+
+                    />
             }
         </div>
     )
@@ -41,7 +41,7 @@ MovieList.defaultProps = {
     data: [],
     isLoad: true,
     isError: false,
-    onChangeRating: ()=>{}
+    onChangeRating: () => { }
 };
 
 MovieList.propTypes = {
