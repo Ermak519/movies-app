@@ -5,19 +5,19 @@ import PropTypes from 'prop-types';
 import MovieDBService from '../../services/MovieDBService';
 import { MovieItem } from '../MovieItem';
 import { PaginationList } from "../PaginationList";
-import { Status } from "../Status";
+import { LoadingStatus } from "../LoadingStatus";
 
 import './MovieList.scss'
 
 
 export default class MovieList extends Component {
-    constructor({ onChangeRating }) {
-        super();
-        this.onChangeRating = onChangeRating;
+    constructor(props) {
+        super(props);
         this.movieDBService = new MovieDBService();
 
         this.state = {
             status: '', // empty, error, loading, loaded
+            totalPages: null,
             data: [
                 {
                     id: null,
@@ -84,31 +84,34 @@ export default class MovieList extends Component {
     }
 
     componentDidMount() {
-        const {request} = this.props;
+        const { request } = this.props;
         if (!request) {
-            this.setState({status: 'empty'})
+            this.setState({ status: 'empty' })
+        } else {
+            this.getData(request)
         }
     }
 
     componentDidUpdate(prevProps) {
-        const {request} = this.props;
+        const { request } = this.props;
 
-        if(request !== prevProps.request) {
+        if (request !== prevProps.request) {
             this.getData(request)
         }
-        
+
     }
 
     getData = (query) => {
         if (!query) return
 
         this.movieDBService.getMovie(query)
-            .then((res)=>{
-                this.setState({status: 'loading'})
+            .then((res) => {
+                this.setState({ status: 'loading' })
                 return res
             })
             .then((res) => {
-                const { results } = res;
+                const { results, total_pages: totalPages } = res;
+                this.setState({ totalPages });
                 const { data } = this.state;
                 return data.map((obj, i) => {
                     const elem =
@@ -132,8 +135,16 @@ export default class MovieList extends Component {
             });
     }
 
+    onChangeRating = (id, value) => {
+        const { data: arr } = this.state
+        const idx = arr.findIndex(elem => elem.id === id)
+        const item = arr[idx]
+        item.clientRating = localStorage.setItem(`movie-rating_${id}`, value)
+        this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
+    }
+
     render() {
-        const {status, data} = this.state;
+        const { status, data, totalPages } = this.state;
 
         return (
             <div className="movie-list">
@@ -152,12 +163,13 @@ export default class MovieList extends Component {
                                         onChangeRating={this.onChangeRating} />
                                 </List.Item>
                             )}
-                        /> : <Status
-                                status={status}
-                            />
+                        /> : <LoadingStatus
+                            status={status}
+                        />
                 }
-                <PaginationList 
-                    status={status}/>
+                <PaginationList
+                    totalPages={totalPages}
+                    status={status} />
             </div>
         )
     }
@@ -165,10 +177,8 @@ export default class MovieList extends Component {
 
 MovieList.defaultProps = {
     request: '',
-    onChangeRating: () => { }
 };
 
 MovieList.propTypes = {
     request: PropTypes.string,
-    onChangeRating: PropTypes.func
 };

@@ -6,8 +6,9 @@ export default class MovieDBService {
 
     #API_Key = 'api_key=c44a17584532fd2e9358778c916fc8ce'
 
-    getMovie = async (query) => {
-        const { data } = await axios.get(`${this.#API_URL}movie?${this.#API_Key}&query=${query}`)
+
+    getMovie = async (query, page = 1) => {
+        const { data } = await axios.get(`${this.#API_URL}movie?${this.#API_Key}&query=${query}&page=${page}`)
         return data
     }
 

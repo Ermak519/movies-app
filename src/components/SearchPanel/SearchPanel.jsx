@@ -16,17 +16,15 @@ export default class SearchPanel extends Component {
             value: ''
         }
 
-        this.search = debounce(this.onUpdateInputValue, 200)
+        this.search = debounce(this.onSearchMovie, 250)
     }
 
-    // eslint-disable-next-line react/no-unused-class-component-methods
     onSearch = (e) => {
         const { value } = this.state;
-        this.onUpdateInputValue(e);
-        this.onSearchMovie(value);
+        this.onUpdateInputValue(e).then(() => { if (value.trim() !== '') this.search(value); });
     }
 
-    onUpdateInputValue = event =>  this.setState({ value: event.target.value })
+    onUpdateInputValue = async (event) => this.setState({ value: event.target.value })
 
     render() {
         const { value } = this.state
@@ -36,7 +34,7 @@ export default class SearchPanel extends Component {
                     className="search-panel__input"
                     placeholder="Type to search..."
                     value={value}
-                    onChange={this.search}
+                    onChange={this.onSearch}
                 />
             </div>
         )
