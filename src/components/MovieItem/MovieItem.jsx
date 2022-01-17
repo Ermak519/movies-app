@@ -11,7 +11,7 @@ import './MovieItem.scss'
 
 const { Title, Text } = Typography;
 
-export default function MovieItem({ item, isLoad, onChangeRating }) {
+export default function MovieItem({ item, status, onChangeRating }) {
     const { id, title, descr, img, genres, date, rating, clientRating } = item;
     const filterDescrText = (str) => str === null ? null : str.split(' ').filter((elem, i) => i < 25).join(' ');
     const newDescr = filterDescrText(descr);
@@ -34,7 +34,7 @@ export default function MovieItem({ item, isLoad, onChangeRating }) {
                     display: "flex",
                 }}
                 cover={<img alt={title || 'loading'} src={picture} style={{ width: 183, height: 281 }} />}
-                loading={isLoad}
+                loading={status !== 'loaded'}
             >
                 <div className="movie-list-item__wrapper">
                     <div className="movie-list-item__main">
@@ -70,12 +70,12 @@ export default function MovieItem({ item, isLoad, onChangeRating }) {
 
 MovieItem.defaultProps = {
     item: {},
-    isLoad: true,
+    status: '',
     onChangeRating: ()=>{}
 };
 
 MovieItem.propTypes = {
     item: PropTypes.objectOf(PropTypes.any),
-    isLoad: PropTypes.bool,
+    status: PropTypes.string,
     onChangeRating: PropTypes.func
 };

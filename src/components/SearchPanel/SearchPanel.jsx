@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Input } from 'antd';
 import PropTypes from "prop-types";
 
+import debounce from "lodash.debounce";
+
+
 import './SearchPanel.scss';
 
 export default class SearchPanel extends Component {
@@ -12,17 +15,18 @@ export default class SearchPanel extends Component {
         this.state = {
             value: ''
         }
+
+        this.search = debounce(this.onUpdateInputValue, 200)
     }
 
-    onSearch = () => {
+    // eslint-disable-next-line react/no-unused-class-component-methods
+    onSearch = (e) => {
         const { value } = this.state;
-        this.onSearchMovie(value)
+        this.onUpdateInputValue(e);
+        this.onSearchMovie(value);
     }
 
-    onChange = (e) => {
-        this.setState({ value: e.target.value });
-    }
-
+    onUpdateInputValue = event =>  this.setState({ value: event.target.value })
 
     render() {
         const { value } = this.state
@@ -32,8 +36,7 @@ export default class SearchPanel extends Component {
                     className="search-panel__input"
                     placeholder="Type to search..."
                     value={value}
-                    onChange={this.onChange}
-                    onPressEnter={this.onSearch}
+                    onChange={this.search}
                 />
             </div>
         )

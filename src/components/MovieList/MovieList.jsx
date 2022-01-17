@@ -1,30 +1,144 @@
 import React, { Component } from "react";
-import { List, Result } from 'antd';
+import { List, message } from 'antd';
 import PropTypes from 'prop-types';
 
-import { MovieItem } from '../MovieItem'
+import MovieDBService from '../../services/MovieDBService';
+import { MovieItem } from '../MovieItem';
+import { PaginationList } from "../PaginationList";
+import { Status } from "../Status";
 
 import './MovieList.scss'
 
 
 export default class MovieList extends Component {
-    constructor({ data, isLoad, isError, onChangeRating }) {
-        super()
+    constructor({ onChangeRating }) {
+        super();
+        this.onChangeRating = onChangeRating;
+        this.movieDBService = new MovieDBService();
+
+        this.state = {
+            status: '', // empty, error, loading, loaded
+            data: [
+                {
+                    id: null,
+                    title: null,
+                    descr: null,
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null,
+                    rating: null,
+                    clientRating: null
+                },
+                {
+                    id: null,
+                    title: null,
+                    descr: null,
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null,
+                    rating: null,
+                    clientRating: null
+                },
+                {
+                    id: null,
+                    title: null,
+                    descr: null,
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null,
+                    rating: null,
+                    clientRating: null
+                },
+                {
+                    id: null,
+                    title: null,
+                    descr: null,
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null,
+                    rating: null,
+                    clientRating: null
+                },
+                {
+                    id: null,
+                    title: null,
+                    descr: null,
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null,
+                    rating: null,
+                    clientRating: null
+                },
+                {
+                    id: null,
+                    title: null,
+                    descr: null,
+                    img: null,
+                    genres: ['Action', 'Drama'],
+                    date: null,
+                    rating: null,
+                    clientRating: null
+                }
+            ],
+        }
     }
 
     componentDidMount() {
-
+        const {request} = this.props;
+        if (!request) {
+            this.setState({status: 'empty'})
+        }
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
+        const {request} = this.props;
 
+        if(request !== prevProps.request) {
+            this.getData(request)
+        }
+        
+    }
+
+    getData = (query) => {
+        if (!query) return
+
+        this.movieDBService.getMovie(query)
+            .then((res)=>{
+                this.setState({status: 'loading'})
+                return res
+            })
+            .then((res) => {
+                const { results } = res;
+                const { data } = this.state;
+                return data.map((obj, i) => {
+                    const elem =
+                    {
+                        id: results[i].id,
+                        title: results[i].title,
+                        descr: results[i].overview,
+                        img: results[i].poster_path,
+                        date: results[i].release_date || undefined,
+                        genres: obj.genres,
+                        rating: results[i].vote_average,
+                        clientRating: parseFloat(localStorage.getItem(`movie-rating_${results[i].id}`)) || 0
+                    }
+                    return elem
+                })
+            })
+            .then((elem) => { this.setState({ data: elem, status: 'loaded' }) })
+            .catch(() => {
+                message.error('404. Ой, что-то не так.');
+                this.setState({ status: 'error' })
+            });
     }
 
     render() {
+        const {status, data} = this.state;
+
         return (
             <div className="movie-list">
                 {
-                    !isError ?
+                    status === ('loaded' || 'loading') ?
                         <List
                             grid={{
                                 gutter: 6, column: 2
@@ -34,32 +148,27 @@ export default class MovieList extends Component {
                                 <List.Item>
                                     <MovieItem
                                         item={item}
-                                        isLoad={isLoad}
-                                        onChangeRating={onChangeRating} />
+                                        status={status}
+                                        onChangeRating={this.onChangeRating} />
                                 </List.Item>
                             )}
-                        /> : <Result
-                            className="movie-list-error"
-                            status="404"
-                            title="404"
-                            subTitle="По Вашему запросу ничего не найдено"
-                        />
+                        /> : <Status
+                                status={status}
+                            />
                 }
+                <PaginationList 
+                    status={status}/>
             </div>
         )
     }
 }
 
 MovieList.defaultProps = {
-    data: [],
-    isLoad: true,
-    isError: false,
+    request: '',
     onChangeRating: () => { }
 };
 
 MovieList.propTypes = {
-    data: PropTypes.arrayOf(PropTypes.object),
-    isLoad: PropTypes.bool,
-    isError: PropTypes.bool,
+    request: PropTypes.string,
     onChangeRating: PropTypes.func
 };
