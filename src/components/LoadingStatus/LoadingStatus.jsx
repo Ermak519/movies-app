@@ -22,12 +22,6 @@ export default function LoadingStatus({ status: statusType }) {
         subTitle = 'По Вашему запросу ничего не найдено'
     }
 
-    // if(typeError === 'network error') {
-    //     status = 'error';
-    //     title = 'Нет сети';
-    //     subTitle = 'Отсутствует подключение к сети Интернет'
-    // }
-
     return (
         statusType === 'loading' ?
             <div className="load-spin">
