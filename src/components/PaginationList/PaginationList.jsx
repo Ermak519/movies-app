@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 import './PaginationList.scss'
 
-export default function PaginationList({ status }) {
+export default function PaginationList({ totalPages, status, currentPage, onChangeCurrentPage }) {
     return (
         <div className="pagination">
             {
@@ -12,7 +12,10 @@ export default function PaginationList({ status }) {
                     className="pagination__list"
                     size="small"
                     defaultCurrent={1}
-                    total={50} /> : null
+                    showSizeChanger={false}
+                    current={currentPage}
+                    onChange={onChangeCurrentPage}
+                    total={totalPages * 10} /> : null
             }
         </div>
     )
@@ -20,8 +23,14 @@ export default function PaginationList({ status }) {
 
 PaginationList.defaultProps = {
     status: '',
+    onChangeCurrentPage: ()=>{},
+    currentPage: 1,
+    totalPages: 10
 };
 
 PaginationList.propTypes = {
     status: PropTypes.string,
+    onChangeCurrentPage: PropTypes.func,
+    currentPage: PropTypes.number,
+    totalPages: PropTypes.number
 };

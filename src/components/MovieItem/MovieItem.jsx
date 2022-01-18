@@ -34,7 +34,7 @@ export default function MovieItem({ item, status, onChangeRating }) {
                     display: "flex",
                 }}
                 cover={<img alt={title || 'loading'} src={picture} style={{ width: 183, height: 281 }} />}
-                loading={status !== 'loaded'}
+                loading={status === 'loading-cards'}
             >
                 <div className="movie-list-item__wrapper">
                     <div className="movie-list-item__main">

@@ -11,19 +11,22 @@ export default class App extends Component {
         super();
 
         this.state = {
-            request: ''
+            request: '',
+            currentPage: 1
         };
     }
-
-
 
     onSearchMovie = (text) => {
         console.log(text)
         this.setState({ request: text })
     }
 
+    onChangeCurrentPage = (page = 1) => {
+        this.setState({currentPage: page})
+    }
+
     render() {
-        const { request } = this.state;
+        const { request, currentPage } = this.state;
 
         return (
             <div className="app">
@@ -32,6 +35,8 @@ export default class App extends Component {
                     onSearchMovie={this.onSearchMovie} />
                 <MovieList
                     request={request}
+                    currentPage={currentPage}
+                    onChangeCurrentPage={this.onChangeCurrentPage}
                 />
             </div>
         )

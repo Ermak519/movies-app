@@ -29,15 +29,16 @@ export default function LoadingStatus({ status: typeError }) {
     // }
 
     return (
-        typeError ? <Result
-            className="loading-status"
+        typeError === 'loading'? 
+        <div className="load-spin">
+            <Spin
+                size="large" 
+            /> 
+        </div> : <Result
             status={status}
             title={title}
             subTitle={subTitle}
-        /> : <div className="load-spin">
-            <Spin
-                size="large" />
-        </div>
+        />  
     )
 
 }

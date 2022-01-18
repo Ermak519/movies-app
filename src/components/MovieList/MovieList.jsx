@@ -16,7 +16,7 @@ export default class MovieList extends Component {
         this.movieDBService = new MovieDBService();
 
         this.state = {
-            status: '', // empty, error, loading, loaded
+            status: '', // empty, error, loading, loading-cards, loaded
             totalPages: null,
             data: [
                 {
@@ -93,25 +93,28 @@ export default class MovieList extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { request } = this.props;
+        const { request, currentPage, onChangeCurrentPage} = this.props;
 
         if (request !== prevProps.request) {
             this.getData(request)
+            onChangeCurrentPage()
+        }
+
+        if (currentPage !== prevProps.currentPage && request === prevProps.request) {
+            this.getData(request, currentPage)
         }
 
     }
 
-    getData = (query) => {
+    getData = (query, page) => {
         if (!query) return
+        this.setState({ status: 'loading' })
 
-        this.movieDBService.getMovie(query)
-            .then((res) => {
-                this.setState({ status: 'loading' })
-                return res
-            })
+        this.movieDBService.getMovie(query, page)
             .then((res) => {
                 const { results, total_pages: totalPages } = res;
-                this.setState({ totalPages });
+                this.setState({ totalPages});
+
                 const { data } = this.state;
                 return data.map((obj, i) => {
                     const elem =
@@ -128,7 +131,8 @@ export default class MovieList extends Component {
                     return elem
                 })
             })
-            .then((elem) => { this.setState({ data: elem, status: 'loaded' }) })
+            .then((elem) => { this.setState({ data: elem, status: 'loading-cards' }) })
+            .then(()=>{this.setState({ status: 'loaded' });})
             .catch(() => {
                 message.error('404. Ой, что-то не так.');
                 this.setState({ status: 'error' })
@@ -143,14 +147,15 @@ export default class MovieList extends Component {
         this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
     }
 
+
     render() {
         const { status, data, totalPages } = this.state;
+        const {currentPage, onChangeCurrentPage} = this.props;
 
         return (
             <div className="movie-list">
                 {
-                    status === ('loaded' || 'loading') ?
-                        <List
+                    status === 'loaded' ? <List
                             grid={{
                                 gutter: 6, column: 2
                             }}
@@ -167,9 +172,12 @@ export default class MovieList extends Component {
                             status={status}
                         />
                 }
+                
                 <PaginationList
                     totalPages={totalPages}
-                    status={status} />
+                    currentPage={currentPage}
+                    status={status}
+                    onChangeCurrentPage={onChangeCurrentPage} />
             </div>
         )
     }
@@ -177,8 +185,12 @@ export default class MovieList extends Component {
 
 MovieList.defaultProps = {
     request: '',
+    currentPage: 1,
+    onChangeCurrentPage: ()=>{}
 };
 
 MovieList.propTypes = {
     request: PropTypes.string,
+    currentPage: PropTypes.number,
+    onChangeCurrentPage: PropTypes.func
 };
