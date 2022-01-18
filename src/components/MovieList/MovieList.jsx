@@ -93,27 +93,27 @@ export default class MovieList extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { request, currentPage, onChangeCurrentPage} = this.props;
+        const { request, currentPage, onChangeCurrentPage } = this.props;
+        if (request !== prevProps.request && !request) this.getData('a', 'loading')
 
         if (request !== prevProps.request) {
-            this.getData(request)
+            this.getData(request, 'loading')
             onChangeCurrentPage()
         }
 
         if (currentPage !== prevProps.currentPage && request === prevProps.request) {
-            this.getData(request, currentPage)
+            this.getData(request, 'loading-cards', currentPage)
         }
-
     }
 
-    getData = (query, page) => {
+    getData = (query, initSate, page) => {
         if (!query) return
-        this.setState({ status: 'loading' })
+        this.setState({ status: initSate })
 
         this.movieDBService.getMovie(query, page)
             .then((res) => {
                 const { results, total_pages: totalPages } = res;
-                this.setState({ totalPages});
+                this.setState({ totalPages });
 
                 const { data } = this.state;
                 return data.map((obj, i) => {
@@ -131,8 +131,8 @@ export default class MovieList extends Component {
                     return elem
                 })
             })
-            .then((elem) => { this.setState({ data: elem, status: 'loading-cards' }) })
-            .then(()=>{this.setState({ status: 'loaded' });})
+            .then((elem) => { this.setState({ data: elem }) })
+            .then(() => { this.setState({ status: 'loaded' }); })
             .catch(() => {
                 message.error('404. Ой, что-то не так.');
                 this.setState({ status: 'error' })
@@ -147,32 +147,30 @@ export default class MovieList extends Component {
         this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
     }
 
-
     render() {
         const { status, data, totalPages } = this.state;
-        const {currentPage, onChangeCurrentPage} = this.props;
+        const { currentPage, onChangeCurrentPage } = this.props;
 
         return (
             <div className="movie-list">
-                {
-                    status === 'loaded' ? <List
-                            grid={{
-                                gutter: 6, column: 2
-                            }}
-                            dataSource={data}
-                            renderItem={item => (
-                                <List.Item>
-                                    <MovieItem
-                                        item={item}
-                                        status={status}
-                                        onChangeRating={this.onChangeRating} />
-                                </List.Item>
-                            )}
-                        /> : <LoadingStatus
-                            status={status}
-                        />
+                {(status === 'loaded' || status === 'loading-cards') ?
+                    <List
+                        grid={{
+                            gutter: 6, column: 2
+                        }}
+                        dataSource={data}
+                        renderItem={item => (
+                            <List.Item>
+                                <MovieItem
+                                    item={item}
+                                    status={status}
+                                    onChangeRating={this.onChangeRating} />
+                            </List.Item>
+                        )}
+                    /> : <LoadingStatus
+                        status={status}
+                    />
                 }
-                
                 <PaginationList
                     totalPages={totalPages}
                     currentPage={currentPage}
@@ -186,7 +184,7 @@ export default class MovieList extends Component {
 MovieList.defaultProps = {
     request: '',
     currentPage: 1,
-    onChangeCurrentPage: ()=>{}
+    onChangeCurrentPage: () => { }
 };
 
 MovieList.propTypes = {

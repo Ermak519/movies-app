@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Offline, Online } from "react-detect-offline";
+import { Result } from 'antd';
 
 import { MovieList } from "../MovieList";
 import { SearchPanel } from "../SearchPanel";
@@ -22,7 +24,7 @@ export default class App extends Component {
     }
 
     onChangeCurrentPage = (page = 1) => {
-        this.setState({currentPage: page})
+        this.setState({ currentPage: page })
     }
 
     render() {
@@ -30,14 +32,22 @@ export default class App extends Component {
 
         return (
             <div className="app">
-                <SearchPanel
-                    request={request}
-                    onSearchMovie={this.onSearchMovie} />
-                <MovieList
-                    request={request}
-                    currentPage={currentPage}
-                    onChangeCurrentPage={this.onChangeCurrentPage}
-                />
+                <Online>
+                    <SearchPanel
+                        request={request}
+                        onSearchMovie={this.onSearchMovie} />
+                    <MovieList
+                        request={request}
+                        currentPage={currentPage}
+                        onChangeCurrentPage={this.onChangeCurrentPage}
+                    />
+                </Online>
+                <Offline>
+                    <Result
+                        status="500"
+                        title="Отсутвует подключение к интернету"
+                        subTitle="Найдите ближайшую точку Wi-Fi" />
+                </Offline>
             </div>
         )
     }

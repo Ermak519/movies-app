@@ -5,18 +5,18 @@ import { Result, Spin } from "antd";
 
 import './LoadingStatus.scss'
 
-export default function LoadingStatus({ status: typeError }) {
+export default function LoadingStatus({ status: statusType }) {
     let status
     let title
     let subTitle
 
-    if (typeError === 'empty') {
+    if (statusType === 'empty') {
         status = 'success';
         title = 'Введите запрос в строку поиска';
         subTitle = 'Какой фильм хотите найти?'
     }
 
-    if (typeError === 'error') {
+    if (statusType === 'error') {
         status = '404';
         title = '404';
         subTitle = 'По Вашему запросу ничего не найдено'
@@ -29,16 +29,16 @@ export default function LoadingStatus({ status: typeError }) {
     // }
 
     return (
-        typeError === 'loading'? 
-        <div className="load-spin">
-            <Spin
-                size="large" 
-            /> 
-        </div> : <Result
-            status={status}
-            title={title}
-            subTitle={subTitle}
-        />  
+        statusType === 'loading' ?
+            <div className="load-spin">
+                <Spin
+                    size="large"
+                />
+            </div> : <Result
+                status={status}
+                title={title}
+                subTitle={subTitle}
+            />
     )
 
 }
