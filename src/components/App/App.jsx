@@ -4,6 +4,7 @@ import { Result, Tabs, Empty } from 'antd';
 import { SearchOutlined, StarOutlined } from '@ant-design/icons';
 
 import { MovieList } from "../MovieList";
+import { MovieListRated } from "../MovieListRated";
 import { SearchPanel } from "../SearchPanel";
 
 import './App.scss';
@@ -31,19 +32,19 @@ export default class App extends Component {
     render() {
         const { request, currentPage } = this.state;
         const { TabPane } = Tabs;
-
+        console.log(localStorage.key(3))
         return (
             <div className="app">
                 <Online>
                     <Tabs defaultActiveKey="1" centered>
                         <TabPane
-                        tab={
-                            <span>
-                                <SearchOutlined />
-                                Search
-                            </span>
-                        }
-                        key="1">
+                            tab={
+                                <span>
+                                    <SearchOutlined />
+                                    Search
+                                </span>
+                            }
+                            key="1">
                             <SearchPanel
                                 request={request}
                                 onSearchMovie={this.onSearchMovie} />
@@ -54,31 +55,30 @@ export default class App extends Component {
                             />
                         </TabPane>
                         <TabPane
-                        tab={
-                            <span>
-                                <StarOutlined />
-                                Rated
-                            </span>
-                        }
-                        key="2">
+                            tab={
+                                <span>
+                                    <StarOutlined />
+                                    Rated
+                                </span>
+                            }
+                            key="2">
                             <SearchPanel
                                 request={request}
                                 onSearchMovie={this.onSearchMovie} />
-                            <Empty
-                            image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
-                            imageStyle={{
-                              height: 60,
-                            }}
-                            description={
-                              <span>
-                                Здесь пока ничего нет
-                              </span>
-                            }/>
+                            {localStorage.length !== 0 ?
+                                <MovieListRated
+                                    localStorageLength={localStorage.length}
+                                /> :
+                                <Empty
+                                    image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
+                                    imageStyle={{
+                                        height: 60,
+                                    }}
+                                    description={<span>Здесь пока ничего нет</span>} />}
                         </TabPane>
-                        
                     </Tabs>
-                    
                 </Online>
+
                 <Offline>
                     <Result
                         status="500"

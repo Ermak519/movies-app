@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { List, message } from 'antd';
+import { List } from 'antd';
 import PropTypes from 'prop-types';
 
 import MovieDBService from '../../services/MovieDBService';
@@ -7,10 +7,10 @@ import { MovieItem } from '../MovieItem';
 import { PaginationList } from "../PaginationList";
 import { LoadingStatus } from "../LoadingStatus";
 
-import './MovieList.scss'
+import './MovieListRated.scss'
 
 
-export default class MovieList extends Component {
+export default class MovieListRated extends Component {
     constructor(props) {
         super(props);
         this.movieDBService = new MovieDBService();
@@ -106,44 +106,11 @@ export default class MovieList extends Component {
         }
     }
 
-    getData = (query, initSate, page) => {
-        if (!query) return
-        this.setState({ status: initSate })
-
-        this.movieDBService.getMovie(query, page)
-            .then((res) => {
-                const { results, total_pages: totalPages } = res;
-                this.setState({ totalPages });
-
-                const { data } = this.state;
-                return data.map((obj, i) => {
-                    const elem =
-                    {
-                        id: results[i].id,
-                        title: results[i].title,
-                        descr: results[i].overview,
-                        img: results[i].poster_path,
-                        date: results[i].release_date || undefined,
-                        genres: obj.genres,
-                        rating: results[i].vote_average,
-                        clientRating: parseFloat(localStorage.getItem(`movie-rating_${results[i].id}`)) || 0
-                    }
-                    return elem
-                })
-            })
-            .then((elem) => { this.setState({ data: elem }) })
-            .then(() => { this.setState({ status: 'loaded' }); })
-            .catch(() => {
-                message.error('404. Ой, что-то не так.');
-                this.setState({ status: 'error' })
-            });
-    }
-
     onChangeRating = (id, value) => {
         const { data: arr } = this.state
         const idx = arr.findIndex(elem => elem.id === id)
         const item = arr[idx]
-        item.clientRating = localStorage.setItem(`client-rating_${id}`, value)
+        item.clientRating = localStorage.setItem(`movie-rating_${id}`, value)
         localStorage.setItem(`movie_${id}`, JSON.stringify(item))
         this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
     }
@@ -182,13 +149,13 @@ export default class MovieList extends Component {
     }
 }
 
-MovieList.defaultProps = {
+MovieListRated.defaultProps = {
     request: '',
     currentPage: 1,
     onChangeCurrentPage: () => { }
 };
 
-MovieList.propTypes = {
+MovieListRated.propTypes = {
     request: PropTypes.string,
     currentPage: PropTypes.number,
     onChangeCurrentPage: PropTypes.func
