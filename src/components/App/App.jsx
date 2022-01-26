@@ -21,7 +21,6 @@ export default class App extends Component {
     }
 
     onSearchMovie = (text) => {
-        console.log(text)
         this.setState({ request: text })
     }
 
@@ -32,7 +31,16 @@ export default class App extends Component {
     render() {
         const { request, currentPage } = this.state;
         const { TabPane } = Tabs;
-        console.log(localStorage.key(3))
+        let data;
+
+        try{
+            data = JSON.parse(localStorage.getItem('MovieAPI_DB'))
+        } catch {
+            data = 0
+        }
+
+        
+
         return (
             <div className="app">
                 <Online>
@@ -62,12 +70,9 @@ export default class App extends Component {
                                 </span>
                             }
                             key="2">
-                            <SearchPanel
-                                request={request}
-                                onSearchMovie={this.onSearchMovie} />
                             {localStorage.length !== 0 ?
                                 <MovieListRated
-                                    localStorageLength={localStorage.length}
+                                    localStorageData={data}
                                 /> :
                                 <Empty
                                     image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"

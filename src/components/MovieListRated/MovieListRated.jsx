@@ -2,109 +2,25 @@ import React, { Component } from "react";
 import { List } from 'antd';
 import PropTypes from 'prop-types';
 
-import MovieDBService from '../../services/MovieDBService';
 import { MovieItem } from '../MovieItem';
-import { PaginationList } from "../PaginationList";
-import { LoadingStatus } from "../LoadingStatus";
+// import { PaginationList } from "../PaginationList";
 
 import './MovieListRated.scss'
 
 
 export default class MovieListRated extends Component {
-    constructor(props) {
-        super(props);
-        this.movieDBService = new MovieDBService();
+    constructor({localStorageData}) {
+        super();
+
+        this.localStorageData = localStorageData
 
         this.state = {
             status: '', // empty, error, loading, loading-cards, loaded
-            totalPages: null,
-            data: [
-                {
-                    id: null,
-                    title: null,
-                    descr: null,
-                    img: null,
-                    genres: ['Action', 'Drama'],
-                    date: null,
-                    rating: null,
-                    clientRating: null
-                },
-                {
-                    id: null,
-                    title: null,
-                    descr: null,
-                    img: null,
-                    genres: ['Action', 'Drama'],
-                    date: null,
-                    rating: null,
-                    clientRating: null
-                },
-                {
-                    id: null,
-                    title: null,
-                    descr: null,
-                    img: null,
-                    genres: ['Action', 'Drama'],
-                    date: null,
-                    rating: null,
-                    clientRating: null
-                },
-                {
-                    id: null,
-                    title: null,
-                    descr: null,
-                    img: null,
-                    genres: ['Action', 'Drama'],
-                    date: null,
-                    rating: null,
-                    clientRating: null
-                },
-                {
-                    id: null,
-                    title: null,
-                    descr: null,
-                    img: null,
-                    genres: ['Action', 'Drama'],
-                    date: null,
-                    rating: null,
-                    clientRating: null
-                },
-                {
-                    id: null,
-                    title: null,
-                    descr: null,
-                    img: null,
-                    genres: ['Action', 'Drama'],
-                    date: null,
-                    rating: null,
-                    clientRating: null
-                }
-            ],
+            // totalPages: null,
+            data: null,
         }
     }
 
-    componentDidMount() {
-        const { request } = this.props;
-        if (!request) {
-            this.setState({ status: 'empty' })
-        } else {
-            this.getData(request)
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        const { request, currentPage, onChangeCurrentPage } = this.props;
-        if (request !== prevProps.request && !request) this.getData('a', 'loading')
-
-        if (request !== prevProps.request) {
-            this.getData(request, 'loading')
-            onChangeCurrentPage()
-        }
-
-        if (currentPage !== prevProps.currentPage && request === prevProps.request) {
-            this.getData(request, 'loading-cards', currentPage)
-        }
-    }
 
     onChangeRating = (id, value) => {
         const { data: arr } = this.state
@@ -116,12 +32,11 @@ export default class MovieListRated extends Component {
     }
 
     render() {
-        const { status, data, totalPages } = this.state;
-        const { currentPage, onChangeCurrentPage } = this.props;
+        const { status , data} = this.state;
 
         return (
             <div className="movie-list">
-                {(status === 'loaded' || status === 'loading-cards') ?
+   
                     <List
                         grid={{
                             gutter: 6, column: 2
@@ -135,28 +50,23 @@ export default class MovieListRated extends Component {
                                     onChangeRating={this.onChangeRating} />
                             </List.Item>
                         )}
-                    /> : <LoadingStatus
-                        status={status}
                     />
-                }
-                <PaginationList
+                {/* <PaginationList
                     totalPages={totalPages}
                     currentPage={currentPage}
                     status={status}
-                    onChangeCurrentPage={onChangeCurrentPage} />
+                    onChangeCurrentPage={onChangeCurrentPage} /> */}
             </div>
         )
     }
 }
 
 MovieListRated.defaultProps = {
-    request: '',
-    currentPage: 1,
-    onChangeCurrentPage: () => { }
+    // localStorageLength: 1,
+    localStorageData: []
 };
 
 MovieListRated.propTypes = {
-    request: PropTypes.string,
-    currentPage: PropTypes.number,
-    onChangeCurrentPage: PropTypes.func
+    // localStorageLength: PropTypes.number,
+    localStorageData: PropTypes.arrayOf(PropTypes.object)
 };

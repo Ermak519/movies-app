@@ -126,25 +126,47 @@ export default class MovieList extends Component {
                         date: results[i].release_date || undefined,
                         genres: obj.genres,
                         rating: results[i].vote_average,
-                        clientRating: parseFloat(localStorage.getItem(`movie-rating_${results[i].id}`)) || 0
+                        clientRating: this.takeMovieRating(JSON.parse(localStorage.getItem('MovieAPI_DB')), results[i].id) || 0
                     }
                     return elem
                 })
             })
             .then((elem) => { this.setState({ data: elem }) })
             .then(() => { this.setState({ status: 'loaded' }); })
-            .catch(() => {
+            .catch((error) => {
                 message.error('404. Ой, что-то не так.');
+                console.log(error)
                 this.setState({ status: 'error' })
             });
+    }
+
+    takeMovieRating = (arr, id) => {
+        try {
+            const idx = arr.findIndex(elem => elem.id === id)
+            const item = arr[idx]
+            return item.clientRating
+        } catch  {
+            return 0
+        }
+        
     }
 
     onChangeRating = (id, value) => {
         const { data: arr } = this.state
         const idx = arr.findIndex(elem => elem.id === id)
         const item = arr[idx]
-        item.clientRating = localStorage.setItem(`client-rating_${id}`, value)
-        localStorage.setItem(`movie_${id}`, JSON.stringify(item))
+        item.clientRating = value
+        
+        let movieLSItems;
+
+        try {
+            movieLSItems = JSON.parse(localStorage.getItem('MovieAPI_DB'))
+            localStorage.setItem('MovieAPI_DB', JSON.stringify([...movieLSItems, item]))
+        } catch {
+            localStorage.setItem('MovieAPI_DB', JSON.stringify([item]))
+        }
+        
+
         this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
     }
 
