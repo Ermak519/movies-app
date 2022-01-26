@@ -12,6 +12,11 @@ export default class MovieDBService {
         return data
     }
 
+    getMovieFromLocalStorage = async () => {
+        const data = JSON.parse(localStorage.getItem('MovieAPI_DB'));
+        return data
+    }
+
     getData = async (query) => {
         const data = await axios.get(`${this.#API_URL}movie?${this.#API_Key}&query=${query}`)
         return data

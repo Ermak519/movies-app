@@ -3,6 +3,8 @@ import { Offline, Online } from "react-detect-offline";
 import { Result, Tabs, Empty } from 'antd';
 import { SearchOutlined, StarOutlined } from '@ant-design/icons';
 
+
+
 import { MovieList } from "../MovieList";
 import { MovieListRated } from "../MovieListRated";
 import { SearchPanel } from "../SearchPanel";
@@ -16,7 +18,8 @@ export default class App extends Component {
 
         this.state = {
             request: '',
-            currentPage: 1
+            currentPage: 1,
+            dataLength: !JSON.parse(localStorage.getItem('MovieAPI_DB')) ? 0 : JSON.parse(localStorage.getItem('MovieAPI_DB')).length
         };
     }
 
@@ -24,22 +27,19 @@ export default class App extends Component {
         this.setState({ request: text })
     }
 
+    onChangeDataLenght = () => {
+        this.setState({
+            dataLength: JSON.parse(localStorage.getItem('MovieAPI_DB')).length
+        })
+    }
+
     onChangeCurrentPage = (page = 1) => {
         this.setState({ currentPage: page })
     }
 
     render() {
-        const { request, currentPage } = this.state;
+        const { request, currentPage, dataLength } = this.state;
         const { TabPane } = Tabs;
-        let data;
-
-        try{
-            data = JSON.parse(localStorage.getItem('MovieAPI_DB'))
-        } catch {
-            data = 0
-        }
-
-        
 
         return (
             <div className="app">
@@ -60,6 +60,7 @@ export default class App extends Component {
                                 request={request}
                                 currentPage={currentPage}
                                 onChangeCurrentPage={this.onChangeCurrentPage}
+                                onChangeDataLenght={this.onChangeDataLenght}
                             />
                         </TabPane>
                         <TabPane
@@ -70,9 +71,9 @@ export default class App extends Component {
                                 </span>
                             }
                             key="2">
-                            {localStorage.length !== 0 ?
+                            {dataLength !== 0 ?
                                 <MovieListRated
-                                    localStorageData={data}
+                                    dataLength={dataLength}
                                 /> :
                                 <Empty
                                     image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"

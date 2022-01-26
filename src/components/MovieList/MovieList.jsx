@@ -85,6 +85,7 @@ export default class MovieList extends Component {
 
     componentDidMount() {
         const { request } = this.props;
+
         if (!request) {
             this.setState({ status: 'empty' })
         } else {
@@ -145,27 +146,30 @@ export default class MovieList extends Component {
             const idx = arr.findIndex(elem => elem.id === id)
             const item = arr[idx]
             return item.clientRating
-        } catch  {
+        } catch {
             return 0
         }
-        
+
     }
 
     onChangeRating = (id, value) => {
         const { data: arr } = this.state
+        const { onChangeDataLenght } = this.props;
+
         const idx = arr.findIndex(elem => elem.id === id)
         const item = arr[idx]
         item.clientRating = value
-        
+
         let movieLSItems;
 
         try {
-            movieLSItems = JSON.parse(localStorage.getItem('MovieAPI_DB'))
-            localStorage.setItem('MovieAPI_DB', JSON.stringify([...movieLSItems, item]))
+            movieLSItems = JSON.parse(localStorage.getItem('MovieAPI_DB'));
+            localStorage.setItem('MovieAPI_DB', JSON.stringify([...movieLSItems, item]));
+            onChangeDataLenght()
         } catch {
             localStorage.setItem('MovieAPI_DB', JSON.stringify([item]))
         }
-        
+
 
         this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
     }
@@ -207,11 +211,13 @@ export default class MovieList extends Component {
 MovieList.defaultProps = {
     request: '',
     currentPage: 1,
-    onChangeCurrentPage: () => { }
+    onChangeCurrentPage: () => { },
+    onChangeDataLenght: () => { }
 };
 
 MovieList.propTypes = {
     request: PropTypes.string,
     currentPage: PropTypes.number,
-    onChangeCurrentPage: PropTypes.func
+    onChangeCurrentPage: PropTypes.func,
+    onChangeDataLenght: PropTypes.func
 };
