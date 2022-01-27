@@ -11,6 +11,8 @@ import './MovieList.scss'
 
 
 export default class MovieList extends Component {
+    #localStore = 'MovieAPI_DB';
+
     constructor(props) {
         super(props);
         this.movieDBService = new MovieDBService();
@@ -134,9 +136,8 @@ export default class MovieList extends Component {
             })
             .then((elem) => { this.setState({ data: elem }) })
             .then(() => { this.setState({ status: 'loaded' }); })
-            .catch((error) => {
+            .catch(() => {
                 message.error('404. Ой, что-то не так.');
-                console.log(error)
                 this.setState({ status: 'error' })
             });
     }
@@ -159,19 +160,30 @@ export default class MovieList extends Component {
         const idx = arr.findIndex(elem => elem.id === id)
         const item = arr[idx]
         item.clientRating = value
-
-        let movieLSItems;
-
-        try {
-            movieLSItems = JSON.parse(localStorage.getItem('MovieAPI_DB'));
-            localStorage.setItem('MovieAPI_DB', JSON.stringify([...movieLSItems, item]));
-            onChangeDataLenght()
-        } catch {
-            localStorage.setItem('MovieAPI_DB', JSON.stringify([item]))
-        }
-
-
+        this.saveMovieToLocalStorage(item, id, value)
+        onChangeDataLenght();
         this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
+    }
+
+    saveMovieToLocalStorage = (item, id) => {
+        if (localStorage.getItem(this.#localStore) === null) {
+            localStorage.setItem(this.#localStore, JSON.stringify([item]));
+        } else {
+            const  movieLSItems = JSON.parse(localStorage.getItem(this.#localStore));
+
+            const check = movieLSItems.find(obj => obj.id === id);
+            // let idxInStorage;
+            if(!check) {
+                localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems, item]))
+            } else {
+                console.log('almost have')
+                // idxInStorage = movieLSItems.findIndex(elem => elem.id === id);
+                // const newItem = item;
+                // newItem.clientRating = value;
+                // localStorage.clear()
+                // localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems.slice(0, idxInStorage), newItem, ...movieLSItems.slice(0, idxInStorage + 1)]));
+            };
+        }
     }
 
     render() {

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { List } from 'antd';
 import PropTypes from 'prop-types';
 
-import MovieDBService from '../../services/MovieDBService';
 import { MovieItem } from '../MovieItem';
 // import { PaginationList } from "../PaginationList";
 
@@ -10,15 +9,16 @@ import './MovieListRated.scss'
 
 
 export default class MovieListRated extends Component {
+    #localStore = 'MovieAPI_DB';
+
     constructor(props) {
         super(props);
 
-        this.movieDBService = new MovieDBService();
 
         this.state = {
             status: '', // empty, error, loading, loading-cards, loaded
             // totalPages: null,
-            data: JSON.parse(localStorage.getItem('MovieAPI_DB')),
+            data: JSON.parse(localStorage.getItem(this.#localStore)),
         }
     }
 
@@ -35,20 +35,8 @@ export default class MovieListRated extends Component {
     }
 
     getDataFromLocalStorage = () => {
-        this.movieDBService.getMovieFromLocalStorage().then((data) => {
-            data.forEach((obj, i) => {
-                const elem = {
-                    id: data[i].id,
-                    title: data[i].title,
-                    descr: data[i].descr,
-                    img: data[i].img,
-                    date: data[i].date || undefined,
-                    genres: obj.genres,
-                    rating: data[i].rating,
-                    clientRating: data[i].clientRating
-                }
-                return elem
-            });
+        this.setState({
+            data: JSON.parse(localStorage.getItem(this.#localStore))
         })
     }
 
@@ -57,16 +45,23 @@ export default class MovieListRated extends Component {
         const idx = arr.findIndex(elem => elem.id === id)
         const item = arr[idx]
         item.clientRating = value
+        this.changeMovieFromLocalStorage(id, value)
+    }
 
-        let movieLSItems;
+    // eslint-disable-next-line no-unused-vars
+    changeMovieFromLocalStorage = (id, value) => {
+        const arr = JSON.parse(localStorage.getItem(this.#localStore));
+        const idx = arr.findIndex(elem => elem.id === id);
+        const item = arr[idx]
+        console.log(item)
+        // const  movieLSItems = JSON.parse(localStorage.getItem(this.#localStore));
+        // const check = movieLSItems.find(obj => obj.id === id)
 
-        try {
-            movieLSItems = JSON.parse(localStorage.getItem('MovieAPI_DB'))
-            localStorage.setItem('MovieAPI_DB', JSON.stringify([...movieLSItems, item]))
-        } catch {
-            localStorage.setItem('MovieAPI_DB', JSON.stringify([item]))
-        }
-        this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
+        // if(!check) localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems, item]));
+            
+        // const newItem = item;
+        // newItem.clientRating = value;
+        // localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems.slice(0, idx), newItem, ...movieLSItems.slice(idx+1)]));
     }
 
     render() {
