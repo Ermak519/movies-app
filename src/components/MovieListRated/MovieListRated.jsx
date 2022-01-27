@@ -16,8 +16,6 @@ export default class MovieListRated extends Component {
 
 
         this.state = {
-            status: '', // empty, error, loading, loading-cards, loaded
-            // totalPages: null,
             data: JSON.parse(localStorage.getItem(this.#localStore)),
         }
     }
@@ -27,10 +25,19 @@ export default class MovieListRated extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { dataLength } = this.props;
+        const { dataLength, dataStatusLocalStorage, onChangeStatusStorage } = this.props;
 
         if (dataLength !== prevProps.dataLength) {
             this.getDataFromLocalStorage()
+        }
+
+        if (dataLength === 0) {
+            this.getDataFromLocalStorage()
+        }
+
+        if (!dataStatusLocalStorage) {
+            this.getDataFromLocalStorage()
+            onChangeStatusStorage()
         }
     }
 
@@ -45,27 +52,38 @@ export default class MovieListRated extends Component {
         const idx = arr.findIndex(elem => elem.id === id)
         const item = arr[idx]
         item.clientRating = value
-        this.changeMovieFromLocalStorage(id, value)
+
+        if (!value) {
+            this.deleteMovieFromLocalStorage(id)
+        } else {
+            this.changeMovieFromLocalStorage(id, value)
+        }
     }
 
-    // eslint-disable-next-line no-unused-vars
     changeMovieFromLocalStorage = (id, value) => {
+        const { onChangeStatusStorage } = this.props;
+
         const arr = JSON.parse(localStorage.getItem(this.#localStore));
         const idx = arr.findIndex(elem => elem.id === id);
         const item = arr[idx]
-        console.log(item)
-        // const  movieLSItems = JSON.parse(localStorage.getItem(this.#localStore));
-        // const check = movieLSItems.find(obj => obj.id === id)
+        item.clientRating = value;
+        localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), item, ...arr.slice(idx + 1)]));
+        onChangeStatusStorage()
+    }
 
-        // if(!check) localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems, item]));
-            
-        // const newItem = item;
-        // newItem.clientRating = value;
-        // localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems.slice(0, idx), newItem, ...movieLSItems.slice(idx+1)]));
+    deleteMovieFromLocalStorage = (id) => {
+        const { onChangeStatusStorage } = this.props;
+
+        const arr = JSON.parse(localStorage.getItem(this.#localStore));
+        const idx = arr.findIndex(elem => elem.id === id);
+        const item = arr[idx]
+        item.clientRating = 0;
+        localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), ...arr.slice(idx + 1)]));
+        onChangeStatusStorage()
     }
 
     render() {
-        const { status, data } = this.state;
+        const { data } = this.state;
 
         return (
             <div className="movie-list">
@@ -79,16 +97,10 @@ export default class MovieListRated extends Component {
                         <List.Item>
                             <MovieItem
                                 item={item}
-                                status={status}
                                 onChangeRating={this.onChangeRating} />
                         </List.Item>
                     )}
                 />
-                {/* <PaginationList
-                    totalPages={totalPages}
-                    currentPage={currentPage}
-                    status={status}
-                    onChangeCurrentPage={onChangeCurrentPage} /> */}
             </div>
         )
     }
@@ -96,8 +108,12 @@ export default class MovieListRated extends Component {
 
 MovieListRated.defaultProps = {
     dataLength: 1,
+    dataStatusLocalStorage: true,
+    onChangeStatusStorage: () => { }
 };
 
 MovieListRated.propTypes = {
     dataLength: PropTypes.number,
+    dataStatusLocalStorage: PropTypes.bool,
+    onChangeStatusStorage: PropTypes.func
 };

@@ -150,7 +150,6 @@ export default class MovieList extends Component {
         } catch {
             return 0
         }
-
     }
 
     onChangeRating = (id, value) => {
@@ -165,23 +164,23 @@ export default class MovieList extends Component {
         this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
     }
 
-    saveMovieToLocalStorage = (item, id) => {
+    saveMovieToLocalStorage = (item, id, value) => {
+        const { onChangeStatusStorage } = this.props;
+
         if (localStorage.getItem(this.#localStore) === null) {
             localStorage.setItem(this.#localStore, JSON.stringify([item]));
         } else {
-            const  movieLSItems = JSON.parse(localStorage.getItem(this.#localStore));
-
+            const movieLSItems = JSON.parse(localStorage.getItem(this.#localStore));
             const check = movieLSItems.find(obj => obj.id === id);
-            // let idxInStorage;
-            if(!check) {
+            if (!check) {
                 localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems, item]))
             } else {
-                console.log('almost have')
-                // idxInStorage = movieLSItems.findIndex(elem => elem.id === id);
-                // const newItem = item;
-                // newItem.clientRating = value;
-                // localStorage.clear()
-                // localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems.slice(0, idxInStorage), newItem, ...movieLSItems.slice(0, idxInStorage + 1)]));
+                const arr = JSON.parse(localStorage.getItem(this.#localStore));
+                const idx = arr.findIndex(elem => elem.id === id);
+                const newItem = arr[idx]
+                newItem.clientRating = value;
+                localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]));
+                onChangeStatusStorage()
             };
         }
     }
@@ -224,12 +223,14 @@ MovieList.defaultProps = {
     request: '',
     currentPage: 1,
     onChangeCurrentPage: () => { },
-    onChangeDataLenght: () => { }
+    onChangeDataLenght: () => { },
+    onChangeStatusStorage: () => { }
 };
 
 MovieList.propTypes = {
     request: PropTypes.string,
     currentPage: PropTypes.number,
     onChangeCurrentPage: PropTypes.func,
-    onChangeDataLenght: PropTypes.func
+    onChangeDataLenght: PropTypes.func,
+    onChangeStatusStorage: PropTypes.func
 };

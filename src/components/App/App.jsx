@@ -19,12 +19,21 @@ export default class App extends Component {
         this.state = {
             request: '',
             currentPage: 1,
-            dataLength: !JSON.parse(localStorage.getItem('MovieAPI_DB')) ? 0 : JSON.parse(localStorage.getItem('MovieAPI_DB')).length
+            dataLength: !JSON.parse(localStorage.getItem('MovieAPI_DB')) ? 0 : JSON.parse(localStorage.getItem('MovieAPI_DB')).length,
+            dataStatusLocalStorage: true  // done,edit
         };
     }
 
     onSearchMovie = (text) => {
         this.setState({ request: text })
+    }
+
+    onChangeStatusStorage = () => {
+        const { dataStatusLocalStorage } = this.state;
+
+        this.setState({
+            dataStatusLocalStorage: !dataStatusLocalStorage
+        })
     }
 
     onChangeDataLenght = () => {
@@ -38,7 +47,7 @@ export default class App extends Component {
     }
 
     render() {
-        const { request, currentPage, dataLength } = this.state;
+        const { request, currentPage, dataLength, dataStatusLocalStorage } = this.state;
         const { TabPane } = Tabs;
 
         return (
@@ -61,6 +70,7 @@ export default class App extends Component {
                                 currentPage={currentPage}
                                 onChangeCurrentPage={this.onChangeCurrentPage}
                                 onChangeDataLenght={this.onChangeDataLenght}
+                                onChangeStatusStorage={this.onChangeStatusStorage}
                             />
                         </TabPane>
                         <TabPane
@@ -74,6 +84,8 @@ export default class App extends Component {
                             {dataLength !== 0 ?
                                 <MovieListRated
                                     dataLength={dataLength}
+                                    onChangeStatusStorage={this.onChangeStatusStorage}
+                                    dataStatusLocalStorage={dataStatusLocalStorage}
                                 /> :
                                 <Empty
                                     image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
