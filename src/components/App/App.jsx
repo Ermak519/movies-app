@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { Component } from "react";
 import { Offline, Online } from "react-detect-offline";
 import { Result, Tabs, Empty } from 'antd';
@@ -18,36 +20,25 @@ export default class App extends Component {
 
         this.state = {
             request: '',
-            currentPage: 1,
-            dataLength: !JSON.parse(localStorage.getItem('MovieAPI_DB')) ? 0 : JSON.parse(localStorage.getItem('MovieAPI_DB')).length,
-            dataStatusLocalStorage: true  // done,edit
+            storage:  !localStorage.getItem('MovieAPI_DB') ? 'empty' : 'data', // empty, data
+            currentPage: 1, 
+            search: 'ready', // done,edit
+            rated: 'ready'
         };
     }
 
-    onSearchMovie = (text) => {
-        this.setState({ request: text })
-    }
+    onSearchMovie = text => this.setState({ request: text })
+    
+    changeStorageStatus = value => this.setState({storage: value})
 
-    onChangeStatusStorage = () => {
-        const { dataStatusLocalStorage } = this.state;
+    changeSearchStatus = value => this.setState({search: value})
 
-        this.setState({
-            dataStatusLocalStorage: !dataStatusLocalStorage
-        })
-    }
+    changeRatedStatus = value => this.setState({rated: value})
 
-    onChangeDataLenght = () => {
-        this.setState({
-            dataLength: JSON.parse(localStorage.getItem('MovieAPI_DB')).length
-        })
-    }
-
-    onChangeCurrentPage = (page = 1) => {
-        this.setState({ currentPage: page })
-    }
+    onChangeCurrentPage = (page = 1) => this.setState({ currentPage: page })
 
     render() {
-        const { request, currentPage, dataLength, dataStatusLocalStorage } = this.state;
+        const { request, currentPage, storage, search , rated} = this.state;
         const { TabPane } = Tabs;
 
         return (
@@ -69,8 +60,12 @@ export default class App extends Component {
                                 request={request}
                                 currentPage={currentPage}
                                 onChangeCurrentPage={this.onChangeCurrentPage}
-                                onChangeDataLenght={this.onChangeDataLenght}
-                                onChangeStatusStorage={this.onChangeStatusStorage}
+                                
+                                rated={rated}
+                                search={search}
+                                changeStorageStatus={this.changeStorageStatus}
+                                changeRatedStatus={this.changeRatedStatus}
+                                changeSearchStatus={this.changeSearchStatus}
                             />
                         </TabPane>
                         <TabPane
@@ -81,18 +76,22 @@ export default class App extends Component {
                                 </span>
                             }
                             key="2">
-                            {dataLength !== 0 ?
+                            {storage !== 'empty' ?
                                 <MovieListRated
-                                    dataLength={dataLength}
-                                    onChangeStatusStorage={this.onChangeStatusStorage}
-                                    dataStatusLocalStorage={dataStatusLocalStorage}
+                                    storage={storage}
+                                    rated={rated}
+                                    search={search}
+                                    changeStorageStatus={this.changeStorageStatus}
+                                    changeRatedStatus={this.changeRatedStatus}
+                                    changeSearchStatus={this.changeSearchStatus}
                                 /> :
                                 <Empty
                                     image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
                                     imageStyle={{
                                         height: 60,
                                     }}
-                                    description={<span>Здесь пока ничего нет</span>} />}
+                                    description={<span>Здесь пока ничего нет</span>} />
+                            }
                         </TabPane>
                     </Tabs>
                 </Online>

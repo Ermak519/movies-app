@@ -26,7 +26,7 @@ export default class MovieList extends Component {
                     title: null,
                     descr: null,
                     img: null,
-                    genres: ['Action', 'Drama'],
+                    genres: null,
                     date: null,
                     rating: null,
                     clientRating: null
@@ -36,7 +36,7 @@ export default class MovieList extends Component {
                     title: null,
                     descr: null,
                     img: null,
-                    genres: ['Action', 'Drama'],
+                    genres: null,
                     date: null,
                     rating: null,
                     clientRating: null
@@ -46,7 +46,7 @@ export default class MovieList extends Component {
                     title: null,
                     descr: null,
                     img: null,
-                    genres: ['Action', 'Drama'],
+                    genres: null,
                     date: null,
                     rating: null,
                     clientRating: null
@@ -56,7 +56,7 @@ export default class MovieList extends Component {
                     title: null,
                     descr: null,
                     img: null,
-                    genres: ['Action', 'Drama'],
+                    genres: null,
                     date: null,
                     rating: null,
                     clientRating: null
@@ -66,7 +66,7 @@ export default class MovieList extends Component {
                     title: null,
                     descr: null,
                     img: null,
-                    genres: ['Action', 'Drama'],
+                    genres: null,
                     date: null,
                     rating: null,
                     clientRating: null
@@ -76,7 +76,7 @@ export default class MovieList extends Component {
                     title: null,
                     descr: null,
                     img: null,
-                    genres: ['Action', 'Drama'],
+                    genres: null,
                     date: null,
                     rating: null,
                     clientRating: null
@@ -87,7 +87,6 @@ export default class MovieList extends Component {
 
     componentDidMount() {
         const { request } = this.props;
-
         if (!request) {
             this.setState({ status: 'empty' })
         } else {
@@ -96,28 +95,36 @@ export default class MovieList extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { request, currentPage, onChangeCurrentPage } = this.props;
-        if (request !== prevProps.request && !request) this.getData('a', 'loading')
-
+        const { request, currentPage, onChangeCurrentPage, search, changeSearchStatus} = this.props;
+        if (request !== prevProps.request && !request) this.getData('a', 'loading');
         if (request !== prevProps.request) {
             this.getData(request, 'loading')
             onChangeCurrentPage()
+        };
+        if (currentPage !== prevProps.currentPage && request === prevProps.request) this.getData(request, 'loading-cards', currentPage);
+        if(search === 'edit') {
+            this.getData(request, 'loading-cards', currentPage);
+            changeSearchStatus('ready')
         }
+    }
 
-        if (currentPage !== prevProps.currentPage && request === prevProps.request) {
-            this.getData(request, 'loading-cards', currentPage)
+    takeMovieRating = (arr, id) => {
+        try {
+            const idx = arr.findIndex(elem => elem.id === id)
+            const item = arr[idx]
+            return item.clientRating
+        } catch {
+            return 0
         }
     }
 
     getData = (query, initSate, page) => {
         if (!query) return
         this.setState({ status: initSate })
-
         this.movieDBService.getMovie(query, page)
             .then((res) => {
                 const { results, total_pages: totalPages } = res;
                 this.setState({ totalPages });
-
                 const { data } = this.state;
                 return data.map((obj, i) => {
                     const elem =
@@ -127,7 +134,7 @@ export default class MovieList extends Component {
                         descr: results[i].overview,
                         img: results[i].poster_path,
                         date: results[i].release_date || undefined,
-                        genres: obj.genres,
+                        genres: results[i].genre_ids,
                         rating: results[i].vote_average,
                         clientRating: this.takeMovieRating(JSON.parse(localStorage.getItem('MovieAPI_DB')), results[i].id) || 0
                     }
@@ -142,47 +149,38 @@ export default class MovieList extends Component {
             });
     }
 
-    takeMovieRating = (arr, id) => {
-        try {
-            const idx = arr.findIndex(elem => elem.id === id)
-            const item = arr[idx]
-            return item.clientRating
-        } catch {
-            return 0
-        }
+    addMovieToLocalStorage = (item) => {
+        const movieLSItems = JSON.parse(localStorage.getItem(this.#localStore));
+        localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems, item]));
+    }
+
+    updateMovieFromLocalStorage = (arr, value, id) => {
+        const idx = arr.findIndex(elem => elem.id === id);
+        const newItem = arr[idx]
+        newItem.clientRating = value;
+        localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]));
     }
 
     onChangeRating = (id, value) => {
         const { data: arr } = this.state
-        const { onChangeDataLenght } = this.props;
-
+        const {changeStorageStatus, changeRatedStatus} = this.props;
         const idx = arr.findIndex(elem => elem.id === id)
         const item = arr[idx]
         item.clientRating = value
-        this.saveMovieToLocalStorage(item, id, value)
-        onChangeDataLenght();
-        this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
-    }
-
-    saveMovieToLocalStorage = (item, id, value) => {
-        const { onChangeStatusStorage } = this.props;
-
-        if (localStorage.getItem(this.#localStore) === null) {
+        const movieLSItems = JSON.parse(localStorage.getItem(this.#localStore));
+        if (movieLSItems === null){
             localStorage.setItem(this.#localStore, JSON.stringify([item]));
+            changeStorageStatus('data')
         } else {
-            const movieLSItems = JSON.parse(localStorage.getItem(this.#localStore));
-            const check = movieLSItems.find(obj => obj.id === id);
-            if (!check) {
-                localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems, item]))
+            const checkMovie = movieLSItems.find(obj => obj.id === id) || false;
+            if (!checkMovie) {
+                this.addMovieToLocalStorage(item);
             } else {
-                const arr = JSON.parse(localStorage.getItem(this.#localStore));
-                const idx = arr.findIndex(elem => elem.id === id);
-                const newItem = arr[idx]
-                newItem.clientRating = value;
-                localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)]));
-                onChangeStatusStorage()
-            };
+                this.updateMovieFromLocalStorage(movieLSItems, value, id);
+            }
         }
+        changeRatedStatus('edit')
+        this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] })
     }
 
     render() {
@@ -223,14 +221,18 @@ MovieList.defaultProps = {
     request: '',
     currentPage: 1,
     onChangeCurrentPage: () => { },
-    onChangeDataLenght: () => { },
-    onChangeStatusStorage: () => { }
+    changeRatedStatus: () => {},
+    changeSearchStatus: () => {},
+    changeStorageStatus: () => {},
+    search: ''
 };
 
 MovieList.propTypes = {
     request: PropTypes.string,
     currentPage: PropTypes.number,
     onChangeCurrentPage: PropTypes.func,
-    onChangeDataLenght: PropTypes.func,
-    onChangeStatusStorage: PropTypes.func
+    changeRatedStatus: PropTypes.func,
+    changeSearchStatus: PropTypes.func,
+    changeStorageStatus: PropTypes.func,
+    search: PropTypes.string
 };
