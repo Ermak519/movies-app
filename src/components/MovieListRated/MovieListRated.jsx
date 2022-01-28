@@ -37,7 +37,7 @@ export default class MovieListRated extends Component {
 
     getData = () => {
         this.movieDBService.getLocalStorageMovies()
-        .then((res) => {this.setState({data: res})})
+            .then((res) => { this.setState({ data: res }) })
     }
 
     onChangeRating = (id, value) => {
@@ -46,16 +46,8 @@ export default class MovieListRated extends Component {
         const idx = arr.findIndex(elem => elem.id === id)
         const item = arr[idx]
         item.clientRating = value
-        this.updateMovieFromLocalStorage(id, value)
-        changeSearchStatus('edit')
-    }
-
-    updateMovieFromLocalStorage = (id, value) => {
-        const arr = JSON.parse(localStorage.getItem(this.#localStore));
-        const idx = arr.findIndex(elem => elem.id === id);
-        const item = arr[idx]
-        item.clientRating = value;
         localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), item, ...arr.slice(idx + 1)]));
+        changeSearchStatus('edit')
     }
 
     render() {
@@ -86,9 +78,9 @@ MovieListRated.defaultProps = {
     storage: '',
     rated: '',
     search: '',
-    changeStorageStatus: ()=>{},
-    changeRatedStatus:()=>{},
-    changeSearchStatus:()=>{},
+    changeStorageStatus: () => { },
+    changeRatedStatus: () => { },
+    changeSearchStatus: () => { },
 };
 
 MovieListRated.propTypes = {

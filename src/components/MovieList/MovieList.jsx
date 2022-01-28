@@ -95,14 +95,14 @@ export default class MovieList extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { request, currentPage, onChangeCurrentPage, search, changeSearchStatus} = this.props;
+        const { request, currentPage, onChangeCurrentPage, search, changeSearchStatus } = this.props;
         if (request !== prevProps.request && !request) this.getData('a', 'loading');
         if (request !== prevProps.request) {
             this.getData(request, 'loading')
             onChangeCurrentPage()
         };
         if (currentPage !== prevProps.currentPage && request === prevProps.request) this.getData(request, 'loading-cards', currentPage);
-        if(search === 'edit') {
+        if (search === 'edit') {
             this.getData(request, 'loading-cards', currentPage);
             changeSearchStatus('ready')
         }
@@ -163,12 +163,12 @@ export default class MovieList extends Component {
 
     onChangeRating = (id, value) => {
         const { data: arr } = this.state
-        const {changeStorageStatus, changeRatedStatus} = this.props;
+        const { changeStorageStatus, changeRatedStatus } = this.props;
         const idx = arr.findIndex(elem => elem.id === id)
         const item = arr[idx]
         item.clientRating = value
         const movieLSItems = JSON.parse(localStorage.getItem(this.#localStore));
-        if (movieLSItems === null){
+        if (movieLSItems === null) {
             localStorage.setItem(this.#localStore, JSON.stringify([item]));
             changeStorageStatus('data')
         } else {
@@ -221,9 +221,9 @@ MovieList.defaultProps = {
     request: '',
     currentPage: 1,
     onChangeCurrentPage: () => { },
-    changeRatedStatus: () => {},
-    changeSearchStatus: () => {},
-    changeStorageStatus: () => {},
+    changeRatedStatus: () => { },
+    changeSearchStatus: () => { },
+    changeStorageStatus: () => { },
     search: ''
 };
 

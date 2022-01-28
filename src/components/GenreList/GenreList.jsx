@@ -1,13 +1,15 @@
 import React from "react";
+import shortid from 'shortid';
 
 import { Tag, Space } from 'antd';
 import PropTypes from 'prop-types';
 
 export default function GenreList({ genres }) {
+    const genresArr = genres.map((genre) => <Tag key={`genre_${shortid.generate()}`}>{genre}</Tag>)
+
     return (
         <Space size={1} >
-            <Tag>{genres[0]}</Tag>
-            <Tag>{genres[1]}</Tag>
+            {genresArr}
         </Space>
     )
 }
