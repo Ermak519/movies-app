@@ -2,6 +2,7 @@ import React from "react";
 import { Card, Typography, Image } from 'antd';
 import PropTypes from 'prop-types';
 import format from 'date-fns/format'
+import { GenreConsumer } from "../../services/GenreContext";
 
 import { GenreList } from "../GenreList";
 import { ClientRating } from "../ClientRating";
@@ -57,7 +58,16 @@ export default function MovieItem({ item, status, onChangeRating }) {
                             <Text type="secondary">{formatDate ?? 'coming soon'}</Text>
                         </div>
                         <div className="movie-list-item__genres">
-                            <GenreList genres={genres} />
+                            <GenreConsumer>
+                                {
+                                    (genresList) =>
+                                        < GenreList
+                                            genres={genres}
+                                            genresList={genresList}
+                                        />
+                                }
+                            </GenreConsumer>
+
                         </div>
                         <Text className="movie-list-item__descr">{`${newDescr} ...`}</Text>
                     </div>
