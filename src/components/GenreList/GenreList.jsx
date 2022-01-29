@@ -16,7 +16,10 @@ export default function GenreList({ genres: genresID, genresList }) {
     return (
         <Space size={1} >
             {
-                genresName.map(({ name }) => <Tag key={`genre_${shortid.generate()}`}>{name}</Tag>)
+                genresName.map(({ name }) => <Tag
+                    key={`genre_${shortid.generate()}`}
+                    color="green">{name}
+                </Tag>)
             }
         </Space>
     )
