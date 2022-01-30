@@ -96,7 +96,7 @@ export default class MovieList extends Component {
 
     componentDidUpdate(prevProps) {
         const { request, currentPage, onChangeCurrentPage, search, changeSearchStatus } = this.props;
-        if (request !== prevProps.request && !request) this.getData('a', 'loading');
+        if (request !== prevProps.request && !request) this.getData('the way back', 'loading');
         if (request !== prevProps.request) {
             this.getData(request, 'loading')
             onChangeCurrentPage()

@@ -1,12 +1,10 @@
-/* eslint-disable */
-
-
-
 import React from "react";
 import shortid from 'shortid';
 
 import { Tag, Space } from 'antd';
 import PropTypes from 'prop-types';
+
+import './GenreList.scss'
 
 export default function GenreList({ genres: genresID, genresList }) {
     const { genres } = genresList;
@@ -14,7 +12,7 @@ export default function GenreList({ genres: genresID, genresList }) {
     const genresName = genres.filter((genre) => genresID.includes(genre.id))
 
     return (
-        <Space size={1} >
+        <Space size={1} className="genre-list-space" >
             {
                 genresName.map(({ name }) => <Tag
                     key={`genre_${shortid.generate()}`}
