@@ -9,8 +9,8 @@ import './SearchPanel.scss';
 export default function SearchPanel({ onSearchMovie }) {
   const search = debounce(onSearchMovie, 2000);
 
-  const onSearch = (e) => {
-    search(e.target.value);
+  const onSearch = (event) => {
+    search(event.target.value);
   };
 
   return (
@@ -21,7 +21,7 @@ export default function SearchPanel({ onSearchMovie }) {
 }
 
 SearchPanel.defaultProps = {
-  onSearchMovie: () => {},
+  onSearchMovie: () => { },
 };
 
 SearchPanel.propTypes = {
