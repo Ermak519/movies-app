@@ -1,1 +1,1 @@
-export { default as MovieItem } from './MovieItem.jsx'
+export { default as MovieItem } from './MovieItem.jsx';

@@ -1,1 +1,1 @@
-export { default as ClientRating } from './ClientRating.jsx'
+export { default as ClientRating } from './ClientRating.jsx';

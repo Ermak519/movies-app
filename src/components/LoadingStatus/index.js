@@ -1,1 +1,1 @@
-export { default as LoadingStatus } from './LoadingStatus.jsx'
+export { default as LoadingStatus } from './LoadingStatus.jsx';

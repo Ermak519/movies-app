@@ -1,36 +1,29 @@
-import React from "react";
+import React from 'react';
 import { Input } from 'antd';
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 
-import debounce from "lodash.debounce";
-
+import debounce from 'lodash.debounce';
 
 import './SearchPanel.scss';
 
 export default function SearchPanel({ onSearchMovie }) {
+  const search = debounce(onSearchMovie, 2000);
 
-    const search = debounce(onSearchMovie, 2000)
+  const onSearch = (e) => {
+    search(e.target.value);
+  };
 
-    const onSearch = (e) => {
-        search(e.target.value);
-    }
-
-    return (
-        <div className="search-panel">
-            <Input
-                className="search-panel__input"
-                placeholder="Type to search..."
-                onChange={onSearch}
-            />
-        </div>
-    )
-
+  return (
+    <div className="search-panel">
+      <Input className="search-panel__input" placeholder="Type to search..." onChange={onSearch} />
+    </div>
+  );
 }
 
 SearchPanel.defaultProps = {
-    onSearchMovie: () => { },
+  onSearchMovie: () => {},
 };
 
 SearchPanel.propTypes = {
-    onSearchMovie: PropTypes.func,
+  onSearchMovie: PropTypes.func,
 };

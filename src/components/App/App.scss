@@ -7,14 +7,13 @@
   margin-top: 50px;
   font-family: 'Inter', sans-serif;
 
-  @media (max-width: 320px){
-    width: 320px;
+  @media (max-width: 420px) {
+    width: 420px;
     padding: 10px;
   }
-
 }
 
-.ant-tabs-nav{
+.ant-tabs-nav {
   width: 200px;
   align-self: center;
 }
