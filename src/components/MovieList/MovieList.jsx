@@ -100,7 +100,10 @@ export default class MovieList extends Component {
       this.getData(request, 'loading');
       onChangeCurrentPage();
     }
-    if (currentPage !== prevProps.currentPage && request === prevProps.request) this.getData(request, 'loading-cards', currentPage);
+    if (currentPage !== prevProps.currentPage && request === prevProps.request) {
+      window.scrollTo(0, 0) ;
+      this.getData(request, 'loading-cards', currentPage);
+    }
     if (search === 'edit') {
       this.getData(request, 'loading-cards', currentPage);
       changeSearchStatus('ready');
@@ -196,7 +199,12 @@ export default class MovieList extends Component {
           <List
             grid={{
               gutter: 6,
-              column: 1,
+              xs: 1,
+              sm: 1,
+              md: 2,
+              lg: 2,
+              xl: 2,
+              xxl: 2
             }}
             dataSource={data}
             renderItem={(item) => (

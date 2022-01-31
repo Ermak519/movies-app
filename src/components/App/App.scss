@@ -4,10 +4,11 @@
 .app {
   width: 1000px;
   margin: auto;
-  margin-top: 50px;
+
   font-family: 'Inter', sans-serif;
 
   @media (max-width: 420px) {
+    margin-top: 0;
     width: 420px;
     padding: 10px;
   }
