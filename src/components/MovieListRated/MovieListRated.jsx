@@ -40,13 +40,21 @@ export default class MovieListRated extends Component {
     });
   };
 
+
+
   onChangeRating = (id, value) => {
-    const { changeSearchStatus } = this.props;
+    const { changeSearchStatus, changeRatedStatus } = this.props;
     const { data: arr } = this.state;
     const idx = arr.findIndex((elem) => elem.id === id);
     const item = arr[idx];
-    item.clientRating = value;
-    localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), item, ...arr.slice(idx + 1)]));
+    if (value) {
+      item.clientRating = value;
+      localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), item, ...arr.slice(idx + 1)]));
+    } else {
+      localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), ...arr.slice(idx + 1)]));
+      this.setState({ data: localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), ...arr.slice(idx + 1)])) })
+      changeRatedStatus('edit');
+    }
     changeSearchStatus('edit');
   };
 
@@ -81,9 +89,9 @@ MovieListRated.defaultProps = {
   storage: '',
   rated: '',
   search: '',
-  changeStorageStatus: () => {},
-  changeRatedStatus: () => {},
-  changeSearchStatus: () => {},
+  changeStorageStatus: () => { },
+  changeRatedStatus: () => { },
+  changeSearchStatus: () => { },
 };
 
 MovieListRated.propTypes = {

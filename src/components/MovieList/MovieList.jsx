@@ -101,7 +101,7 @@ export default class MovieList extends Component {
       onChangeCurrentPage();
     }
     if (currentPage !== prevProps.currentPage && request === prevProps.request) {
-      window.scrollTo(0, 0) ;
+      window.scrollTo(0, 0);
       this.getData(request, 'loading-cards', currentPage);
     }
     if (search === 'edit') {
@@ -172,21 +172,30 @@ export default class MovieList extends Component {
     const { changeStorageStatus, changeRatedStatus } = this.props;
     const idx = arr.findIndex((elem) => elem.id === id);
     const item = arr[idx];
-    item.clientRating = value;
     const movieLSItems = JSON.parse(localStorage.getItem(this.#localStore));
-    if (movieLSItems === null) {
-      localStorage.setItem(this.#localStore, JSON.stringify([item]));
-      changeStorageStatus('data');
-    } else {
-      const checkMovie = movieLSItems.find((obj) => obj.id === id) || false;
-      if (!checkMovie) {
-        this.addMovieToLocalStorage(item);
+    item.clientRating = value;
+    if (value) {
+      if (movieLSItems === null) {
+        localStorage.setItem(this.#localStore, JSON.stringify([item]));
+        changeStorageStatus('data');
       } else {
-        this.updateMovieFromLocalStorage(movieLSItems, value, id);
+        const checkMovie = movieLSItems.find((obj) => obj.id === id) || false;
+        if (!checkMovie) {
+          this.addMovieToLocalStorage(item);
+        } else {
+          this.updateMovieFromLocalStorage(movieLSItems, value, id);
+        }
       }
+      this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] });
+    } else {
+      if (movieLSItems.length === 1) {
+        localStorage.setItem(this.#localStore, JSON.stringify([]))
+      } else {
+        localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems.slice(0, idx), ...movieLSItems.slice(idx + 1)]))
+      }
+      this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] });
     }
     changeRatedStatus('edit');
-    this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] });
   };
 
   render() {
@@ -230,10 +239,10 @@ export default class MovieList extends Component {
 MovieList.defaultProps = {
   request: '',
   currentPage: 1,
-  onChangeCurrentPage: () => {},
-  changeRatedStatus: () => {},
-  changeSearchStatus: () => {},
-  changeStorageStatus: () => {},
+  onChangeCurrentPage: () => { },
+  changeRatedStatus: () => { },
+  changeSearchStatus: () => { },
+  changeStorageStatus: () => { },
   search: '',
 };
 
