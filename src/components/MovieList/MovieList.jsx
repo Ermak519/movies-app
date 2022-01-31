@@ -189,9 +189,12 @@ export default class MovieList extends Component {
       this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] });
     } else {
       if (movieLSItems.length === 1) {
-        localStorage.setItem(this.#localStore, JSON.stringify([]))
+        localStorage.setItem(this.#localStore, JSON.stringify([]));
       } else {
-        localStorage.setItem(this.#localStore, JSON.stringify([...movieLSItems.slice(0, idx), ...movieLSItems.slice(idx + 1)]))
+        localStorage.setItem(
+          this.#localStore,
+          JSON.stringify([...movieLSItems.slice(0, idx), ...movieLSItems.slice(idx + 1)])
+        );
       }
       this.setState({ data: [...arr.slice(0, idx), item, ...arr.slice(idx + 1)] });
     }
@@ -213,7 +216,7 @@ export default class MovieList extends Component {
               md: 2,
               lg: 2,
               xl: 2,
-              xxl: 2
+              xxl: 2,
             }}
             dataSource={data}
             renderItem={(item) => (
@@ -239,10 +242,10 @@ export default class MovieList extends Component {
 MovieList.defaultProps = {
   request: '',
   currentPage: 1,
-  onChangeCurrentPage: () => { },
-  changeRatedStatus: () => { },
-  changeSearchStatus: () => { },
-  changeStorageStatus: () => { },
+  onChangeCurrentPage: () => {},
+  changeRatedStatus: () => {},
+  changeSearchStatus: () => {},
+  changeStorageStatus: () => {},
   search: '',
 };
 

@@ -62,12 +62,12 @@ export default function MovieItem({ item, status, onChangeRating }) {
               </div>
               <div className="movie-list-item__main-header">
                 <div className="movie-list-item__header">
-                    <Title className="movie-list-item__title" level={4}>
-                      {title}
-                    </Title>
-                    <div className="movie-list-item__rate">
-                      <MovieRating rating={rating} />
-                    </div>
+                  <Title className="movie-list-item__title" level={4}>
+                    {title}
+                  </Title>
+                  <div className="movie-list-item__rate">
+                    <MovieRating rating={rating} />
+                  </div>
                 </div>
                 <div className="movie-list-item__date">
                   <Text type="secondary">{formatDate ?? 'coming soon'}</Text>

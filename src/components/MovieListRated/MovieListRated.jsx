@@ -40,8 +40,6 @@ export default class MovieListRated extends Component {
     });
   };
 
-
-
   onChangeRating = (id, value) => {
     const { changeSearchStatus, changeRatedStatus } = this.props;
     const { data: arr } = this.state;
@@ -52,7 +50,9 @@ export default class MovieListRated extends Component {
       localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), item, ...arr.slice(idx + 1)]));
     } else {
       localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), ...arr.slice(idx + 1)]));
-      this.setState({ data: localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), ...arr.slice(idx + 1)])) })
+      this.setState({
+        data: localStorage.setItem(this.#localStore, JSON.stringify([...arr.slice(0, idx), ...arr.slice(idx + 1)])),
+      });
       changeRatedStatus('edit');
     }
     changeSearchStatus('edit');
@@ -71,7 +71,7 @@ export default class MovieListRated extends Component {
             md: 2,
             lg: 2,
             xl: 2,
-            xxl: 2
+            xxl: 2,
           }}
           dataSource={data}
           renderItem={(item) => (
@@ -89,9 +89,9 @@ MovieListRated.defaultProps = {
   storage: '',
   rated: '',
   search: '',
-  changeStorageStatus: () => { },
-  changeRatedStatus: () => { },
-  changeSearchStatus: () => { },
+  changeStorageStatus: () => {},
+  changeRatedStatus: () => {},
+  changeSearchStatus: () => {},
 };
 
 MovieListRated.propTypes = {
