@@ -20,12 +20,15 @@
 
   &__header {
     display: flex;
+    height: 32px;
+    overflow: hidden;
     justify-content: space-between;
-    margin-bottom: 7px;
+    padding-bottom: 7px;
   }
 
   &__title {
     font-size: 20px;
+    padding-right: 5px;
   }
 
   &__date {
