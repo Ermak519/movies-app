@@ -12,6 +12,8 @@ import { SearchPanel } from '../SearchPanel';
 import './App.scss';
 
 export default class App extends Component {
+  #localStore = 'MovieAPI_DB'
+
   constructor() {
     super();
 
@@ -19,7 +21,7 @@ export default class App extends Component {
 
     this.state = {
       request: '',
-      storage: !localStorage.getItem('MovieAPI_DB') ? 'empty' : 'data', // empty, data
+      storage: !localStorage.getItem(this.#localStore) ? 'empty' : 'data', // empty, data
       currentPage: 1,
       search: 'ready', // done,edit
       rated: 'ready',
