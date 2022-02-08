@@ -10,6 +10,8 @@
     height: 281px;
     display: flex;
 
+    filter: drop-shadow(0px 4px 12px rgba(0, 0, 0, 0.15));
+
     @media (max-width: 420px) {
       width: 387px;
       height: 245px;
