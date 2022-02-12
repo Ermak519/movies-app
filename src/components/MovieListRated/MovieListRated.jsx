@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import React, { Component } from 'react';
 import { List } from 'antd';
 import PropTypes from 'prop-types';
@@ -86,19 +84,13 @@ export default class MovieListRated extends Component {
 }
 
 MovieListRated.defaultProps = {
-  storage: '',
   rated: '',
-  search: '',
-  changeStorageStatus: () => {},
   changeRatedStatus: () => {},
   changeSearchStatus: () => {},
 };
 
 MovieListRated.propTypes = {
-  storage: PropTypes.string,
   rated: PropTypes.string,
-  search: PropTypes.string,
-  changeStorageStatus: PropTypes.func,
   changeRatedStatus: PropTypes.func,
   changeSearchStatus: PropTypes.func,
 };

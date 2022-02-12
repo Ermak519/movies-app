@@ -21,7 +21,7 @@ export default function SearchPanel({ onSearchMovie }) {
 }
 
 SearchPanel.defaultProps = {
-  onSearchMovie: () => { },
+  onSearchMovie: () => {},
 };
 
 SearchPanel.propTypes = {

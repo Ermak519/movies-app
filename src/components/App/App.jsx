@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Offline, Online } from 'react-detect-offline';
 import { Result, Tabs, Empty } from 'antd';
 import { SearchOutlined, StarOutlined } from '@ant-design/icons';
+
 import MovieDBService from '../../services/MovieDBService';
 import { GenreProvider } from '../../services/GenreContext';
 
@@ -12,7 +13,7 @@ import { SearchPanel } from '../SearchPanel';
 import './App.scss';
 
 export default class App extends Component {
-  #localStore = 'MovieAPI_DB'
+  #localStore = 'MovieAPI_DB';
 
   constructor() {
     super();

@@ -19,68 +19,7 @@ export default class MovieList extends Component {
     this.state = {
       status: '', // empty, error, loading, loading-cards, loaded
       totalPages: null,
-      data: [
-        {
-          id: null,
-          title: null,
-          descr: null,
-          img: null,
-          genres: null,
-          date: null,
-          rating: null,
-          clientRating: null,
-        },
-        {
-          id: null,
-          title: null,
-          descr: null,
-          img: null,
-          genres: null,
-          date: null,
-          rating: null,
-          clientRating: null,
-        },
-        {
-          id: null,
-          title: null,
-          descr: null,
-          img: null,
-          genres: null,
-          date: null,
-          rating: null,
-          clientRating: null,
-        },
-        {
-          id: null,
-          title: null,
-          descr: null,
-          img: null,
-          genres: null,
-          date: null,
-          rating: null,
-          clientRating: null,
-        },
-        {
-          id: null,
-          title: null,
-          descr: null,
-          img: null,
-          genres: null,
-          date: null,
-          rating: null,
-          clientRating: null,
-        },
-        {
-          id: null,
-          title: null,
-          descr: null,
-          img: null,
-          genres: null,
-          date: null,
-          rating: null,
-          clientRating: null,
-        },
-      ],
+      data: [],
     };
   }
 
@@ -128,8 +67,7 @@ export default class MovieList extends Component {
       .then((res) => {
         const { results, total_pages: totalPages } = res;
         this.setState({ totalPages });
-        const { data } = this.state;
-        return data.map((obj, i) => {
+        return results.map((obj, i) => {
           const elem = {
             id: results[i].id,
             title: results[i].title,
@@ -143,8 +81,8 @@ export default class MovieList extends Component {
           return elem;
         });
       })
-      .then((elem) => {
-        this.setState({ data: elem });
+      .then((list) => {
+        this.setState({ data: list });
       })
       .then(() => {
         this.setState({ status: 'loaded' });
@@ -242,10 +180,10 @@ export default class MovieList extends Component {
 MovieList.defaultProps = {
   request: '',
   currentPage: 1,
-  onChangeCurrentPage: () => {},
-  changeRatedStatus: () => {},
-  changeSearchStatus: () => {},
-  changeStorageStatus: () => {},
+  onChangeCurrentPage: () => { },
+  changeRatedStatus: () => { },
+  changeSearchStatus: () => { },
+  changeStorageStatus: () => { },
   search: '',
 };
 
