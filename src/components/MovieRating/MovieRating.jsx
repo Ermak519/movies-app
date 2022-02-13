@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import './MovieRating.scss';
 
-export default function MovieRating({ rating }) {
+export const MovieRating = ({ rating }) => {
   const colors = {
     red: '#E90000',
     orange: '#E97E00',

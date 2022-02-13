@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 import './GenreList.scss';
 
-export default function GenreList({ genres: genresID, genresList }) {
+export const GenreList = ({ genres: genresID, genresList }) => {
   const { genres } = genresList;
 
   const genresName = genres.filter((genre) => genresID.includes(genre.id));

@@ -12,15 +12,15 @@ import './MovieItem.scss';
 
 const { Title, Text } = Typography;
 
-export default function MovieItem({ item, status, onChangeRating }) {
+export const MovieItem = ({ item, status, onChangeRating }) => {
   const { id, title, descr, img, genres, date, rating, clientRating } = item;
   const filterDescrText = (str) =>
     str === null
       ? null
       : str
-          .split(' ')
-          .filter((elem, i) => i < 25)
-          .join(' ');
+        .split(' ')
+        .filter((elem, i) => i < 25)
+        .join(' ');
   const newDescr = filterDescrText(descr);
   const picture = img !== null ? `http://image.tmdb.org/t/p/w500${img}` : 'error';
 
@@ -91,7 +91,7 @@ export default function MovieItem({ item, status, onChangeRating }) {
 MovieItem.defaultProps = {
   item: {},
   status: '',
-  onChangeRating: () => {},
+  onChangeRating: () => { },
 };
 
 MovieItem.propTypes = {

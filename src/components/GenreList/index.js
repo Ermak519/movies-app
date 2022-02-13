@@ -1,1 +1,1 @@
-export { default as GenreList } from './GenreList.jsx';
+export { GenreList } from './GenreList.jsx';

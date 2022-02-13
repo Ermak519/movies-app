@@ -1,1 +1,1 @@
-export { default as MovieRating } from './MovieRating.jsx';
+export { MovieRating } from './MovieRating.jsx';

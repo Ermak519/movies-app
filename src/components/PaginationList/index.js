@@ -1,1 +1,1 @@
-export { default as PaginationList } from './PaginationList.jsx';
+export { PaginationList } from './PaginationList.jsx';

@@ -5,7 +5,7 @@ import { Result, Spin } from 'antd';
 
 import './LoadingStatus.scss';
 
-export default function LoadingStatus({ status: statusType }) {
+export const LoadingStatus = ({ status: statusType }) => {
   let status;
   let title;
   let subTitle;

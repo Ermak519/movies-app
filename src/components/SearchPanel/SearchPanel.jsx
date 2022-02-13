@@ -6,7 +6,7 @@ import debounce from 'lodash.debounce';
 
 import './SearchPanel.scss';
 
-export default function SearchPanel({ onSearchMovie }) {
+export const SearchPanel = ({ onSearchMovie }) => {
   const search = debounce(onSearchMovie, 2000);
 
   const onSearch = (event) => {
@@ -21,7 +21,7 @@ export default function SearchPanel({ onSearchMovie }) {
 }
 
 SearchPanel.defaultProps = {
-  onSearchMovie: () => {},
+  onSearchMovie: () => { },
 };
 
 SearchPanel.propTypes = {

@@ -1,1 +1,1 @@
-export { default as SearchPanel } from './SearchPanel.jsx';
+export { SearchPanel } from './SearchPanel.jsx';
