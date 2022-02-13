@@ -29,7 +29,7 @@ export const LoadingStatus = ({ status: statusType }) => {
   ) : (
     <Result status={status} title={title} subTitle={subTitle} />
   );
-}
+};
 
 LoadingStatus.defaultProps = {
   status: '',

@@ -180,10 +180,10 @@ export default class MovieList extends Component {
 MovieList.defaultProps = {
   request: '',
   currentPage: 1,
-  onChangeCurrentPage: () => { },
-  changeRatedStatus: () => { },
-  changeSearchStatus: () => { },
-  changeStorageStatus: () => { },
+  onChangeCurrentPage: () => {},
+  changeRatedStatus: () => {},
+  changeSearchStatus: () => {},
+  changeStorageStatus: () => {},
   search: '',
 };
 

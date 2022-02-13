@@ -18,10 +18,10 @@ export const SearchPanel = ({ onSearchMovie }) => {
       <Input className="search-panel__input" placeholder="Type to search..." onChange={onSearch} />
     </div>
   );
-}
+};
 
 SearchPanel.defaultProps = {
-  onSearchMovie: () => { },
+  onSearchMovie: () => {},
 };
 
 SearchPanel.propTypes = {

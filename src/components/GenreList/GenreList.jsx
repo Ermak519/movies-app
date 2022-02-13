@@ -20,7 +20,7 @@ export const GenreList = ({ genres: genresID, genresList }) => {
       ))}
     </Space>
   );
-}
+};
 
 GenreList.defaultProps = {
   genres: [],

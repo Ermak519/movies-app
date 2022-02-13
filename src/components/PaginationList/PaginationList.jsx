@@ -20,10 +20,9 @@ export const PaginationList = ({ totalPages, status, currentPage, onChangeCurren
   </div>
 );
 
-
 PaginationList.defaultProps = {
   status: '',
-  onChangeCurrentPage: () => { },
+  onChangeCurrentPage: () => {},
   currentPage: 1,
   totalPages: 10,
 };

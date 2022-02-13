@@ -18,9 +18,9 @@ export const MovieItem = ({ item, status, onChangeRating }) => {
     str === null
       ? null
       : str
-        .split(' ')
-        .filter((elem, i) => i < 25)
-        .join(' ');
+          .split(' ')
+          .filter((elem, i) => i < 25)
+          .join(' ');
   const newDescr = filterDescrText(descr);
   const picture = img !== null ? `http://image.tmdb.org/t/p/w500${img}` : 'error';
 
@@ -86,12 +86,12 @@ export const MovieItem = ({ item, status, onChangeRating }) => {
       </Card>
     </div>
   );
-}
+};
 
 MovieItem.defaultProps = {
   item: {},
   status: '',
-  onChangeRating: () => { },
+  onChangeRating: () => {},
 };
 
 MovieItem.propTypes = {

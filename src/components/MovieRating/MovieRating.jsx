@@ -25,7 +25,7 @@ export const MovieRating = ({ rating }) => {
       {rating}
     </div>
   );
-}
+};
 
 MovieRating.defaultProps = {
   rating: 0,
